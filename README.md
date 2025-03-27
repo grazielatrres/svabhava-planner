@@ -35,24 +35,24 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 ## 💻 Requisitos do Sistema
 
 ### Requisitos Funcionais
-1. Cadastro de novos usuários
-2. Sistema de autenticação
-3. Gerenciamento de aulas (CRUD)
-4. Listagem de aulas disponíveis
-5. Sistema de matrículas
-6. Notificações por e-mail
-7. Cancelamento de matrículas
-8. Dashboard administrativo
+RF1: O sistema deve permitir cadastro de novos usuários
+RF2: O sistema deve ter um sistema de autenticação
+RF3: O sistema deve ter um gerenciamento de aulas (CRUD)
+RF4: O sistema deve exibir uma listagem de horários disponíveis
+RF5: O sistema deve ter um sistema de matrículas
+RF6: O sistema deve permitir cancelar matrículas
+RF7: O sistema deve exibir um dashboard administrativo
+RF8: O sistema deve exibir uma lista de alunos matriculados 
 
 ### Requisitos Não Funcionais
-1. Design responsivo (mobile-first)
-2. Tempo de resposta < 8 segundos
-3. Escalabilidade
-4. Interface intuitiva
-5. Código manutenível
-6. Suporte a múltiplos usuários simultâneos
-7. Compatibilidade cross-browser
-8. Performance otimizada
+RFN1: O sistema deve ter o design responsivo (mobile-first)
+RNF2: O sistema deve ter o tempo de resposta < 8 segundos
+RNF3: O sistema deve ser preparado para a escalabilidade
+RNF4: O sistema deve ter a interface intuitiva
+RNF5: O sistema deve ter um código de fácil manutenção
+RNF6: O sistema deve ter suporte para múltiplos usuários simultâneos
+RNF7: O sistema deve ter compatibilidade cross-browser
+RNF8: O sistema deve ter a performance otimizada
 
 ## 🔧 Instalação e Uso
 
