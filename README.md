@@ -9,6 +9,12 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
 
+## Divisão de responsabilidades
+
+- Sophia: Banco de dados, backend
+- Andrey: Backend e frontend
+- Graziela: Frontend, infraestrutura
+
 ### Principais Funcionalidades
 - Cadastro e gerenciamento de alunos
 - Agendamento de aulas
