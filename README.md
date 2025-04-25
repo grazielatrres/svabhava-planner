@@ -160,7 +160,6 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 ### Padrões de Código
 - **ESLint Rules** - Padronização de código seguindo melhores práticas
 - **TypeScript Strict Mode** - Tipo forte e verificação estática
-- **SOLID Principles** - Princípios de design de software orientado a objetos
 
 ### API e Integração
 - **REST Architecture** - Endpoints seguindo padrões RESTful
@@ -169,7 +168,6 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 
 
 ## 📄 Licença
-
 Este é um projeto acadêmico desenvolvido para fins educacionais e sociais como parte da disciplina de PROJETO DE APRENDIZAGEM COLABORATIVA EXTENSIONISTA (PAC) do curso de Engenharia de Software doCentro Universitário Católica de Santa Catarina(Campus Joinville). Todo o código e documentação foram criados com propósito de aprendizagem e contribuição para a comunidade, demonstrando a aplicação prática do conhecimento acadêmico em benefício da sociedade sem fins lucrativos.
 
 © 2025 - Todos os direitos reservados
