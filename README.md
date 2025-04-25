@@ -150,8 +150,7 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 
 ### Arquitetura
 - **Clean Architecture** - Separação clara de responsabilidades e dependências
-- **Componentes Modulares** - Utilizando Atomic Design para estruturação dos componentes
-- **Design Patterns** - Implementação de padrões como Factory, Observer e Strategy
+- **Componentes Modulares** – Utilizando o padrão arquitetural MVC (Model-View-Controller) para estruturar os componentes da aplicação.​
 
 ### Gestão de Estado
 - **Context API** - Gerenciamento de estado global da aplicação
