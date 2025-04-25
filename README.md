@@ -9,6 +9,12 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
 
+## Divisão de responsabilidades
+
+- Sophia: Banco de dados, backend
+- Andrey: Backend e frontend
+- Graziela: Frontend, infraestrutura
+
 ### Principais Funcionalidades
 - Cadastro e gerenciamento de alunos
 - Agendamento de aulas
@@ -35,24 +41,64 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 ## 💻 Requisitos do Sistema
 
 ### Requisitos Funcionais
-RF1: O sistema deve permitir cadastro de novos usuários
-RF2: O sistema deve ter um sistema de autenticação
-RF3: O sistema deve ter um gerenciamento de aulas (CRUD)
-RF4: O sistema deve exibir uma listagem de horários disponíveis
-RF5: O sistema deve ter um sistema de matrículas
-RF6: O sistema deve permitir cancelar matrículas
-RF7: O sistema deve exibir um dashboard administrativo
-RF8: O sistema deve exibir uma lista de alunos matriculados 
+
+RF1 - O sistema deve permitir que a instrutora cadastre novos alunos com nome, e-mail e telefone.
+
+RF2 - O sistema deve permitir login e logout da instrutora com autenticação por e-mail e senha. 
+
+RF3 - O sistema deve permitir à instrutora criar, editar e excluir turmas com até 3 alunos, informando data, horário e lista de alunos inscritos. 
+
+RF4 - O sistema deve exibir para a instrutora uma agenda diária com os horários das turmas e seus respectivos alunos. 
+
+RF5 - O sistema deve permitir que a instrutora matricule alunos nas turmas com vagas disponíveis (máximo de 3 por turma). 
+
+RF6 - O sistema deve permitir que a instrutora cancele a matrícula de alunos em turmas específicas. 
+
+RF7 - O sistema deve apresentar à instrutora estatísticas como número de turmas, quantidade de alunos, taxa de ocupação e ausências. 
+
+RF8 - O sistema deve permitir que a instrutora marque presença ou falta dos alunos em cada aula realizada. 
+
+RF9 - O sistema deve exibir à instrutora o histórico de presença de cada aluno. 
+
+RF10 - O sistema deve gerar relatórios (PDF ou CSV) de turmas, alunos matriculados e frequência por período. 
+
+RF11 - O sistema deve permitir à instrutora organizar e alterar os horários disponíveis para turmas. 
+
+RF12 - O sistema deve permitir editar dados básicos dos alunos (nome, e-mail, telefone). 
+
+RF13 - O sistema deve exibir mensagens de erro claras e compreensíveis para a instrutora em caso de falhas. 
+
+RF14 - O sistema deve exibir em formato de calendário ou lista todas as turmas do dia, com seus respectivos alunos e status de presença. 
+
+RF15 - O sistema deve permitir registrar pagamentos feitos pelos alunos, valores pendentes e histórico financeiro individual.
+
+RF16 - O sistema deve alertar a instrutora sobre pendências de presença ou pagamentos atrasados dos alunos. 
 
 ### Requisitos Não Funcionais
-RFN1: O sistema deve ter o design responsivo (mobile-first)
-RNF2: O sistema deve ter o tempo de resposta < 8 segundos
-RNF3: O sistema deve ser preparado para a escalabilidade
-RNF4: O sistema deve ter a interface intuitiva
-RNF5: O sistema deve ter um código de fácil manutenção
-RNF6: O sistema deve ter suporte para múltiplos usuários simultâneos
-RNF7: O sistema deve ter compatibilidade cross-browser
-RNF8: O sistema deve ter a performance otimizada
+RNF1 - A interface deve se adaptar bem a diferentes tamanhos de tela, com prioridade para boa usabilidade em celulares e tablets. 
+
+RNF2 - O sistema deve responder a qualquer ação do usuário em até 5 segundos. 
+
+RNF3 - O sistema deve ser estruturado para crescer junto com o aumento de alunos e turmas, sem perda de desempenho. 
+
+RNF4 - A interface deve ser clara, com fluxos simples e linguagem acessível à instrutora. 
+
+RNF5 - O código deve seguir boas práticas (componentização, comentários, organização) para facilitar futuras manutenções e melhorias. 
+
+RNF6 - O sistema deve permitir que a instrutora acesse de diferentes dispositivos ao mesmo tempo, sem conflitos de dados. 
+
+RNF7 - O sistema deve funcionar corretamente nos principais navegadores: Chrome, Firefox, Safari e Edge. 
+
+RNF8 - Deve evitar requisições desnecessárias, usar cache onde possível e carregar dados de forma eficiente. 
+
+RNF9 - As senhas devem ser armazenadas de forma criptografada (ex: bcrypt) e o acesso ao sistema deve ser protegido por autenticação. 
+
+RNF10 - O sistema deve estar disponível para uso em pelo menos 99,9% do tempo, com mecanismos para evitar quedas. 
+
+RNF11 - Deve haver backups automáticos e manuais dos dados críticos, como alunos, turmas, frequência e pagamentos. 
+
+RNF12 -  O sistema deve ser totalmente funcional em telas a partir de 320px de largura. 
+
 
 ## 🔧 Instalação e Uso
 
