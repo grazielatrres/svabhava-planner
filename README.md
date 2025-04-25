@@ -99,6 +99,9 @@ RNF11 - Deve haver backups automáticos e manuais dos dados críticos, como alun
 
 RNF12 -  O sistema deve ser totalmente funcional em telas a partir de 320px de largura. 
 
+## 📊 Modelagem
+![Editor  Mermaid Chart-2025-04-25-200925 (1)](https://github.com/user-attachments/assets/94513c45-76c1-41b4-8f47-dbf60aa05d18)
+
 
 ## 🔧 Instalação e Uso
 
