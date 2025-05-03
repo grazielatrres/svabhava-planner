@@ -10,9 +10,9 @@ export const AppDataSource = new DataSource({
     host: 'localhost',
     port: 3306,
     username: 'root',
-    password: '', // Coloque sua senha do MySQL aqui
+    password: '', 
     database: 'svabhava_planner',
-    synchronize: true, // Cria as tabelas automaticamente (use apenas em desenvolvimento)
+    synchronize: false, 
     logging: true,
     entities: [Aluno, Turma, Presenca, Pagamento],
     subscribers: [],

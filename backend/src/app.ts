@@ -5,6 +5,7 @@ import alunoRoutes from './routes/alunoRoutes';
 import turmaRoutes from './routes/turmaRoutes';
 import presencaRoutes from './routes/presencaRoutes';
 import pagamentoRoutes from './routes/pagamentoRoutes';
+import { AppDataSource } from './config/database';
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +29,13 @@ app.get('/', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+
+AppDataSource.initialize()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Erro ao conectar no banco de dados:', error);
+  });
