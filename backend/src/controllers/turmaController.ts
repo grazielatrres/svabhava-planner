@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { TurmaRepository } from '../repositories/TurmaRepository';
+import { Turma } from '../models/Turma';
 
 export class TurmaController {
   static async getAllTurmas(req: Request, res: Response) {
@@ -25,17 +26,19 @@ export class TurmaController {
 
   static async createTurma(req: Request, res: Response) {
     try {
-      const { data, horario } = req.body;
-      if (!data || !horario) {
-        return res.status(400).json({ error: 'Data e horário são obrigatórios' });
+      const { nome, horario, professor, observacao } = req.body;
+      if (!nome || !horario || !professor) {
+        return res.status(400).json({ error: 'Nome, horário e professor são obrigatórios' });
       }
 
-      const turma = await TurmaRepository.create({
-        data: new Date(data),
+      const turmaData: Omit<Turma, 'id' | 'createdAt' | 'updatedAt' | 'alunos' | 'presencas'> = {
+        nome,
         horario,
-        maxAlunos: 20,
-      });
+        professor,
+        observacao
+      };
 
+      const turma = await TurmaRepository.create(turmaData);
       res.status(201).json(turma);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -44,10 +47,12 @@ export class TurmaController {
 
   static async updateTurma(req: Request, res: Response) {
     try {
-      const { data, horario } = req.body;
+      const { nome, horario, professor, observacao } = req.body;
       const turma = await TurmaRepository.update(req.params.id, {
-        data: data ? new Date(data) : undefined,
-        horario
+        nome,
+        horario,
+        professor,
+        observacao
       });
 
       if (!turma) {
@@ -72,10 +77,10 @@ export class TurmaController {
     }
   }
 
-  static async matricularAluno(req: Request, res: Response) {
+  static async addAluno(req: Request, res: Response) {
     try {
       const { turmaId, alunoId } = req.params;
-      const turma = await TurmaRepository.matricularAluno(turmaId, alunoId);
+      const turma = await TurmaRepository.addAluno(turmaId, alunoId);
 
       if (!turma) {
         return res.status(404).json({ error: 'Turma ou aluno não encontrado' });
@@ -83,22 +88,14 @@ export class TurmaController {
 
       res.json(turma);
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === 'Turma já está cheia') {
-          return res.status(400).json({ error: error.message });
-        }
-        if (error.message === 'Aluno já está matriculado nesta turma') {
-          return res.status(400).json({ error: error.message });
-        }
-      }
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  static async cancelarMatricula(req: Request, res: Response) {
+  static async removeAluno(req: Request, res: Response) {
     try {
       const { turmaId, alunoId } = req.params;
-      const turma = await TurmaRepository.cancelarMatricula(turmaId, alunoId);
+      const turma = await TurmaRepository.removeAluno(turmaId, alunoId);
 
       if (!turma) {
         return res.status(404).json({ error: 'Turma ou aluno não encontrado' });

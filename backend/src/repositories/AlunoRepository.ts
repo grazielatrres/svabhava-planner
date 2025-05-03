@@ -1,46 +1,32 @@
+import { AppDataSource } from '../config/database';
 import { Aluno } from '../models/Aluno';
 
-// In-memory storage for alunos
-const alunos: Aluno[] = [];
-
 export class AlunoRepository {
-  static async findAll(): Promise<Aluno[]> {
-    return alunos;
-  }
+    private static repository = AppDataSource.getRepository(Aluno);
 
-  static async findById(id: string): Promise<Aluno | undefined> {
-    return alunos.find(aluno => aluno.id === id);
-  }
+    static async findAll(): Promise<Aluno[]> {
+        return this.repository.find();
+    }
 
-  static async create(alunoData: Omit<Aluno, 'id' | 'createdAt' | 'updatedAt'>): Promise<Aluno> {
-    const newAluno: Aluno = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...alunoData,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    alunos.push(newAluno);
-    return newAluno;
-  }
+    static async findById(id: string): Promise<Aluno | null> {
+        return this.repository.findOneBy({ id });
+    }
 
-  static async update(id: string, alunoData: Partial<Aluno>): Promise<Aluno | undefined> {
-    const index = alunos.findIndex(aluno => aluno.id === id);
-    if (index === -1) return undefined;
+    static async create(alunoData: Omit<Aluno, 'id' | 'createdAt' | 'updatedAt'>): Promise<Aluno> {
+        const aluno = this.repository.create(alunoData);
+        return this.repository.save(aluno);
+    }
 
-    alunos[index] = {
-      ...alunos[index],
-      ...alunoData,
-      updatedAt: new Date()
-    };
+    static async update(id: string, alunoData: Partial<Aluno>): Promise<Aluno | null> {
+        const aluno = await this.findById(id);
+        if (!aluno) return null;
 
-    return alunos[index];
-  }
+        Object.assign(aluno, alunoData);
+        return this.repository.save(aluno);
+    }
 
-  static async delete(id: string): Promise<boolean> {
-    const index = alunos.findIndex(aluno => aluno.id === id);
-    if (index === -1) return false;
-
-    alunos.splice(index, 1);
-    return true;
-  }
+    static async delete(id: string): Promise<boolean> {
+        const result = await this.repository.delete(id);
+        return result.affected !== 0;
+    }
 } 

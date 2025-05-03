@@ -1,86 +1,56 @@
-import { Turma } from '../models/Turma';
+import { AppDataSource } from '../config/database';
 import { Aluno } from '../models/Aluno';
-import { AlunoRepository } from './AlunoRepository';
-
-// In-memory storage for turmas
-const turmas: Turma[] = [];
+import { Turma } from '../models/Turma';
 
 export class TurmaRepository {
-  static async findAll(): Promise<Turma[]> {
-    return turmas;
-  }
+    private static repository = AppDataSource.getRepository(Turma);
 
-  static async findById(id: string): Promise<Turma | undefined> {
-    return turmas.find(turma => turma.id === id);
-  }
-
-  static async create(turmaData: Omit<Turma, 'id' | 'alunos' | 'createdAt' | 'updatedAt'>): Promise<Turma> {
-    const newTurma: Turma = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...turmaData,
-      alunos: [],
-      maxAlunos: 20, // Limite máximo de alunos por turma
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    turmas.push(newTurma);
-    return newTurma;
-  }
-
-  static async update(id: string, turmaData: Partial<Turma>): Promise<Turma | undefined> {
-    const index = turmas.findIndex(turma => turma.id === id);
-    if (index === -1) return undefined;
-
-    turmas[index] = {
-      ...turmas[index],
-      ...turmaData,
-      updatedAt: new Date()
-    };
-
-    return turmas[index];
-  }
-
-  static async delete(id: string): Promise<boolean> {
-    const index = turmas.findIndex(turma => turma.id === id);
-    if (index === -1) return false;
-
-    turmas.splice(index, 1);
-    return true;
-  }
-
-  static async matricularAluno(turmaId: string, alunoId: string): Promise<Turma | undefined> {
-    const turma = await this.findById(turmaId);
-    if (!turma) return undefined;
-
-    const aluno = await AlunoRepository.findById(alunoId);
-    if (!aluno) return undefined;
-
-    // Verifica se a turma já está cheia
-    if (turma.alunos.length >= turma.maxAlunos) {
-      throw new Error('Turma já está cheia');
+    static async findAll(): Promise<Turma[]> {
+        return this.repository.find({ relations: ['alunos'] });
     }
 
-    // Verifica se o aluno já está matriculado
-    if (turma.alunos.some(a => a.id === alunoId)) {
-      throw new Error('Aluno já está matriculado nesta turma');
+    static async findById(id: string): Promise<Turma | null> {
+        return this.repository.findOne({
+            where: { id },
+            relations: ['alunos']
+        });
     }
 
-    turma.alunos.push(aluno);
-    turma.updatedAt = new Date();
+    static async create(turmaData: Omit<Turma, 'id' | 'createdAt' | 'updatedAt' | 'alunos' | 'presencas'>): Promise<Turma> {
+        const turma = this.repository.create(turmaData);
+        return this.repository.save(turma);
+    }
 
-    return turma;
-  }
+    static async update(id: string, turmaData: Partial<Turma>): Promise<Turma | null> {
+        const turma = await this.findById(id);
+        if (!turma) return null;
 
-  static async cancelarMatricula(turmaId: string, alunoId: string): Promise<Turma | undefined> {
-    const turma = await this.findById(turmaId);
-    if (!turma) return undefined;
+        Object.assign(turma, turmaData);
+        return this.repository.save(turma);
+    }
 
-    const alunoIndex = turma.alunos.findIndex(a => a.id === alunoId);
-    if (alunoIndex === -1) return undefined;
+    static async delete(id: string): Promise<boolean> {
+        const result = await this.repository.delete(id);
+        return result.affected !== 0;
+    }
 
-    turma.alunos.splice(alunoIndex, 1);
-    turma.updatedAt = new Date();
+    static async addAluno(turmaId: string, alunoId: string): Promise<Turma | null> {
+        const turma = await this.findById(turmaId);
+        if (!turma) return null;
 
-    return turma;
-  }
+        const alunoRepository = AppDataSource.getRepository('Aluno');
+        const aluno = await alunoRepository.findOneBy({ id: alunoId });
+        if (!aluno) return null;
+
+        turma.alunos = [...(turma.alunos || []), aluno as Aluno];
+        return this.repository.save(turma);
+    }
+
+    static async removeAluno(turmaId: string, alunoId: string): Promise<Turma | null> {
+        const turma = await this.findById(turmaId);
+        if (!turma) return null;
+
+        turma.alunos = turma.alunos.filter(aluno => aluno.id !== alunoId);
+        return this.repository.save(turma);
+    }
 } 

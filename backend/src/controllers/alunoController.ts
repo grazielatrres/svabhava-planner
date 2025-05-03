@@ -33,7 +33,9 @@ export class AlunoController {
             const aluno = await AlunoRepository.create({
                 nome,
                 email,
-                telefone
+                telefone,
+                presencas: [],
+                pagamentos: []
             });
 
             res.status(201).json(aluno);
