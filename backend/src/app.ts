@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import alunoRoutes from './routes/alunoRoutes';
 import turmaRoutes from './routes/turmaRoutes';
+import presencaRoutes from './routes/presencaRoutes';
+import pagamentoRoutes from './routes/pagamentoRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -16,6 +18,8 @@ app.use(express.json());
 // Routes
 app.use('/api', alunoRoutes);
 app.use('/api', turmaRoutes);
+app.use('/api', presencaRoutes);
+app.use('/api', pagamentoRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
