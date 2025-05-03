@@ -1,101 +1,91 @@
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
+import { Layout, Menu, Typography } from 'antd';
 import styled from 'styled-components';
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import { Link, Route, Routes } from 'react-router-dom';
+import StudentList from './pages/StudentList';
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
 
 const AppContainer = styled.div`
   min-height: 100vh;
+  width: 100%;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 `;
 
-const Nav = styled(NavigationMenu.Root)`
-  padding: 1rem 2rem;
+const StyledHeader = styled(Header)`
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
-`;
-
-const NavList = styled(NavigationMenu.List)`
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
-const NavItem = styled(NavigationMenu.Item)`
-  a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-
-    &:hover {
-      color: #6366f1;
-      background: rgba(99, 102, 241, 0.1);
-    }
+  padding: 0 1rem;
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    padding: 0 2rem;
   }
 `;
 
-const MainContent = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+const StyledContent = styled(Content)`
+  width: 100%;
+  padding: 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 `;
 
-const HeroSection = styled.section`
+const HomeContainer = styled.div`
+  width: 100%;
+  padding: 2rem 1rem;
   text-align: center;
-  padding: 6rem 0;
-  h1 {
-    font-size: 4rem;
-    color: #1a1a1a;
-    margin-bottom: 1.5rem;
-  }
-  p {
-    font-size: 1.5rem;
-    color: #666;
-    max-width: 700px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
+  
+  @media (min-width: 768px) {
+    padding: 6rem 2rem;
   }
 `;
 
-
-const GetStartedButton = styled.button`
-  font-size: 1.25rem;
-  padding: 1rem 2rem;
-  margin-top: 1rem;
+const TitleContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 function App() {
   return (
-    <Theme>
-      <AppContainer>
-        <Nav>
-          <NavList>
-            <NavItem>
-              <NavigationMenu.Link href="/">Início</NavigationMenu.Link>
-            </NavItem>
-          </NavList>
-        </Nav>
+    <AppContainer>
+      <Layout style={{ minHeight: '100vh', width: '100%' }}>
+        <StyledHeader>
+          <Menu mode="horizontal" style={{ border: 'none' }}>
+            <Menu.Item key="home">
+              <Link to="/">Início</Link>
+            </Menu.Item>
+            <Menu.Item key="students">
+              <Link to="/alunos">Alunos</Link>
+            </Menu.Item>
+          </Menu>
+        </StyledHeader>
 
-        <MainContent>
-          <HeroSection>
-            <h1>Yoga Sva-Bhava</h1>
-            <p>
-              Bem-vindo à sua jornada de mindfulness e bem-estar. 
-              Descubra o equilíbrio perfeito entre corpo e mente através das nossas 
-              sessões de yoga cuidadosamente preparadas.
-            </p>
-            <GetStartedButton>Comece Sua Jornada</GetStartedButton>
-          </HeroSection>
-        </MainContent>
-      </AppContainer>
-    </Theme>
+        <StyledContent>
+          <Routes>
+            <Route path="/" element={
+              <HomeContainer>
+                <TitleContainer>
+                  <Title style={{ fontSize: '2.5rem', color: '#1a1a1a', marginBottom: '1.5rem' }}>
+                    Yoga Sva-Bhava
+                  </Title>
+                  <Typography.Paragraph style={{ fontSize: '1.2rem', color: '#666', maxWidth: '700px', margin: '0 auto 2rem', lineHeight: '1.6' }}>
+                    Bem-vindo à sua jornada de mindfulness e bem-estar. 
+                    Descubra o equilíbrio perfeito entre corpo e mente através das nossas 
+                    sessões de yoga cuidadosamente preparadas.
+                  </Typography.Paragraph>
+                </TitleContainer>
+              </HomeContainer>
+            } />
+            <Route path="/alunos" element={<StudentList />} />
+          </Routes>
+        </StyledContent>
+      </Layout>
+    </AppContainer>
   );
 }
 
