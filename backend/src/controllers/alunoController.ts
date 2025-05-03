@@ -1,49 +1,75 @@
 import { Request, Response } from "express";
-import alunoRepositories from "../repositories/alunoRepositories";
+import { AlunoRepository } from "../repositories/AlunoRepository";
 
-const alunoController = {
-    create: (req: Request, res: Response) => {
-        const {nome, endereco, email, telefone, motivo, observacoes} = req.body;
-        alunoRepositories.create(nome, endereco, email, telefone, motivo, observacoes, (err, result) => {
-            if (err) return res.status(500).json({ error: "Erro no servidor" });
-            res.status(201).json({ message: "Aluno criado com sucesso", result })
-        });
-    },
-    findAll: (req: Request, res: Response) => {
-        alunoRepositories.findAll((err, aluno) => {
-            if (err) return res.status(500).json({ error: "Erro no servidor" });
-            res.status(201).json(aluno);
-        });
-    },
-    findByID: (req: Request, res: Response) => {
-        const { ID_aluno } = req.params;
-        alunoRepositories.findById((ID_aluno), (err, aluno) => {
-            if (err) return res.status(500).json({ error: "Erro no servidor" });
-            if (!aluno) return res.status(404).json({ error: "Aluno não encontrado" });
-            res.status(200).json(aluno);
-        });
-    },
-    update: (req: Request, res: Response) => {
-        const ID_aluno = Number(req.params.ID_animal);
-        const { nome, endereco, email, telefone, motivo, observacoes } = req.body;
-        console.log("ID_aluno recebido:", ID_aluno);
-        console.log("Dados recebidos:", { nome, endereco, email, telefone, motivo, observacoes });
+export class AlunoController {
+    static async getAllAlunos(req: Request, res: Response) {
+        try {
+            const alunos = await AlunoRepository.findAll();
+            res.json(alunos);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
 
-        alunoRepositories.update(ID_aluno, nome, endereco, email, telefone, motivo, observacoes, (err, result) => {
-            if (err) {
-                console.error("Erro no update:", err);
-                return res.status(500).json({ error: "Erro no servidor", details: err });
+    static async getAlunoById(req: Request, res: Response) {
+        try {
+            const aluno = await AlunoRepository.findById(req.params.id);
+            if (!aluno) {
+                return res.status(404).json({ error: "Aluno not found" });
             }
-            res.status(200).json({ message: "Aluno atualizado com sucesso", result });
-        });
-    },
-    delete: (req: Request, res: Response) => {
-        const { ID_aluno } = req.params;
-        alunoRepositories.delete((ID_aluno), (err, result) => {
-            if (err) return res.status(500).json({ error: "Erro no servidor" });
-            res.status(200).json({ message: "Aluno deletado com sucesso", result });
-        });
+            res.json(aluno);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    static async createAluno(req: Request, res: Response) {
+        try {
+            const { nome, email, telefone } = req.body;
+            if (!nome || !email || !telefone) {
+                return res.status(400).json({ error: "Nome, email e telefone são obrigatórios" });
+            }
+
+            const aluno = await AlunoRepository.create({
+                nome,
+                email,
+                telefone
+            });
+
+            res.status(201).json(aluno);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    static async updateAluno(req: Request, res: Response) {
+        try {
+            const { nome, email, telefone } = req.body;
+            const aluno = await AlunoRepository.update(req.params.id, {
+                nome,
+                email,
+                telefone
+            });
+
+            if (!aluno) {
+                return res.status(404).json({ error: "Aluno not found" });
+            }
+
+            res.json(aluno);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" });
+        }
+    }
+
+    static async deleteAluno(req: Request, res: Response) {
+        try {
+            const success = await AlunoRepository.delete(req.params.id);
+            if (!success) {
+                return res.status(404).json({ error: "Aluno not found" });
+            }
+            res.status(204).send();
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error" });
+        }
     }
 }
-
-export default alunoController;

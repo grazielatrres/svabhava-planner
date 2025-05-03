@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { calloutRootPropDefs } from "@radix-ui/themes/props";
 import connection from "../config/bd";
-import { Aluno } from "../models/aluno";
 
 
 const alunoRepositories = {
