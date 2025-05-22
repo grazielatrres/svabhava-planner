@@ -1,13 +1,11 @@
-import { Layout, Menu, Typography, Image } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
 import styled from 'styled-components';
 import { Link, Route, Routes } from 'react-router-dom';
 import StudentList from './pages/StudentList';
 import TurmaList from './pages/TurmaList';
-import mindfulness from './assets/mindfulness.svg';
-
+import Home from './pages/Home';
 
 const { Header, Content } = Layout;
-const { Title } = Typography;
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -38,16 +36,6 @@ const StyledContent = styled(Content)`
   }
 `;
 
-const HomeContainer = styled.div`
-  width: 100%;
-  text-align: center;
-`;
-
-const TitleContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
 function App() {
   return (
     <AppContainer>
@@ -71,22 +59,7 @@ function App() {
 
         <StyledContent>
           <Routes>
-            <Route path="/" element={
-              <HomeContainer>
-                <Image preview={false} src={mindfulness} alt="Logo" />
-                <TitleContainer>
-                  <Title style={{ fontSize: '2.5rem', color: '#ba6ac9', marginBottom: '1.5rem' }}>
-                    Yoga Sva-Bhava
-                  </Title>
-                  <Typography.Paragraph style={{ fontSize: '18px', color: '#666', maxWidth: '700px', margin: '0 auto 2rem', lineHeight: '1.6' }}>
-                    Bem-vindo à sua jornada de mindfulness e bem-estar. 
-                    Descubra o equilíbrio perfeito entre corpo e mente através das nossas 
-                    sessões de yoga cuidadosamente preparadas.
-                  </Typography.Paragraph>
-                  <Typography.Paragraph style={{ fontSize: '18px', color: '#666', maxWidth: '700px', margin: '0 auto 2rem', lineHeight: '1.6' }}>© 2025 - CatolicaSC</Typography.Paragraph>
-                </TitleContainer>
-              </HomeContainer>
-            } />
+            <Route path="/" element={<Home />} />
             <Route path="/alunos" element={<StudentList />} />
             <Route path="/turmas" element={<TurmaList />} />
             <Route path="/schedule" element={<StudentList />} />

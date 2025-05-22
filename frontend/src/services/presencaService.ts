@@ -1,4 +1,5 @@
-import api from './api';
+import axios from 'axios';
+import { API_URL } from '../config';
 
 export interface Presenca {
   id?: number;
@@ -10,38 +11,38 @@ export interface Presenca {
 }
 
 export const presencaService = {
-  async getAllPresencas() {
-    const response = await api.get('/presencas');
+  getAllPresencas: async () => {
+    const response = await axios.get(`${API_URL}/presencas`);
     return response.data;
   },
 
-  async getPresencaById(id: number) {
-    const response = await api.get(`/presencas/${id}`);
+  getPresencaById: async (id: number) => {
+    const response = await axios.get(`${API_URL}/presencas/${id}`);
     return response.data;
   },
 
-  async createPresenca(presenca: Omit<Presenca, 'id'>) {
-    const response = await api.post('/presencas', presenca);
+  createPresenca: async (presenca: Omit<Presenca, 'id'>) => {
+    const response = await axios.post(`${API_URL}/presencas`, presenca);
     return response.data;
   },
 
-  async updatePresenca(id: number, presenca: Partial<Presenca>) {
-    const response = await api.put(`/presencas/${id}`, presenca);
+  updatePresenca: async (id: number, presenca: Partial<Presenca>) => {
+    const response = await axios.put(`${API_URL}/presencas/${id}`, presenca);
     return response.data;
   },
 
-  async deletePresenca(id: number) {
-    const response = await api.delete(`/presencas/${id}`);
+  deletePresenca: async (id: number) => {
+    const response = await axios.delete(`${API_URL}/presencas/${id}`);
     return response.data;
   },
 
-  async getPresencasByTurma(turmaId: number) {
-    const response = await api.get(`/presencas/turma/${turmaId}`);
+  getPresencasByTurma: async (turmaId: number) => {
+    const response = await axios.get(`${API_URL}/presencas/turma/${turmaId}`);
     return response.data;
   },
 
-  async getPresencasByAluno(alunoId: number) {
-    const response = await api.get(`/presencas/aluno/${alunoId}`);
+  getPresencasByAluno: async (alunoId: number) => {
+    const response = await axios.get(`${API_URL}/presencas/aluno/${alunoId}`);
     return response.data;
   }
 }; 
