@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Select, List, Tag } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Select, List, Tag, Switch, DatePicker } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusOutlined, UserAddOutlined, UserDeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Turma, turmaService } from '../services/turmaService';
 import { Student, studentService } from '../services/studentService';
+import { Presenca, presencaService } from '../services/presencaService';
+import dayjs from 'dayjs';
 
 const { Column } = Table;
 const { TextArea } = Input;
@@ -15,6 +17,7 @@ const TurmaList: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [studentModalVisible, setStudentModalVisible] = useState(false);
   const [selectedTurma, setSelectedTurma] = useState<Turma | null>(null);
+  const [presencas, setPresencas] = useState<Presenca[]>([]);
   const [form] = Form.useForm();
   const [studentForm] = Form.useForm();
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -37,6 +40,15 @@ const TurmaList: React.FC = () => {
       setStudents(data);
     } catch (error) {
       message.error('Erro ao carregar alunos');
+    }
+  };
+
+  const fetchPresencas = async (turmaId: string) => {
+    try {
+      const data = await presencaService.getPresencasByTurma(turmaId);
+      setPresencas(data);
+    } catch (error) {
+      message.error('Erro ao carregar presenças');
     }
   };
 
@@ -101,6 +113,21 @@ const TurmaList: React.FC = () => {
       fetchTurmas();
     } catch (error) {
       message.error('Erro ao remover aluno');
+    }
+  };
+
+  const handlePresenca = async (turmaId: string, alunoId: string, presente: boolean) => {
+    try {
+      await presencaService.createPresenca({
+        turmaId,
+        alunoId,
+        data: new Date().toISOString(),
+        presente
+      });
+      message.success('Presença registrada com sucesso');
+      fetchPresencas(turmaId);
+    } catch (error) {
+      message.error('Erro ao registrar presença');
     }
   };
 
@@ -173,25 +200,39 @@ const TurmaList: React.FC = () => {
               {record.alunos && record.alunos.length > 0 ? (
                 <List
                   dataSource={record.alunos}
-                  renderItem={(aluno: any) => (
-                    <List.Item
-                      actions={[
-                        <Button
-                          type="text"
-                          danger
-                          icon={<UserDeleteOutlined />}
-                          onClick={() => handleRemoveStudent(record.id, aluno.id)}
-                        >
-                          Remover
-                        </Button>
-                      ]}
-                    >
-                      <List.Item.Meta
-                        title={aluno.nome}
-                        description={aluno.email}
-                      />
-                    </List.Item>
-                  )}
+                  renderItem={(aluno: any) => {
+                    const presenca = presencas.find(p => p.aluno && p.aluno.id === aluno.id);
+                    return (
+                      <List.Item
+                        actions={[
+                          <Space>
+                            <Switch
+                              checkedChildren={<CheckCircleOutlined />}
+                              unCheckedChildren={<CloseCircleOutlined />}
+                              checked={presenca?.presente}
+                              onChange={(checked) => handlePresenca(record.id, aluno.id, checked)}
+                            />
+                            <Tag color={presenca?.presente ? 'success' : 'error'}>
+                              {presenca?.presente ? 'Presente' : 'Ausente'}
+                            </Tag>
+                            <Button
+                              type="text"
+                              danger
+                              icon={<UserDeleteOutlined />}
+                              onClick={() => handleRemoveStudent(record.id, aluno.id)}
+                            >
+                              Remover
+                            </Button>
+                          </Space>
+                        ]}
+                      >
+                        <List.Item.Meta
+                          title={aluno.nome}
+                          description={aluno.email}
+                        />
+                      </List.Item>
+                    );
+                  }}
                 />
               ) : (
                 <p>Nenhum aluno matriculado</p>
@@ -206,6 +247,11 @@ const TurmaList: React.FC = () => {
               </Button>
             </div>
           ),
+          onExpand: (expanded, record) => {
+            if (expanded) {
+              fetchPresencas(record.id);
+            }
+          }
         }}
       >
         <Column title="Nome" dataIndex="nome" key="nome" />
@@ -251,27 +297,24 @@ const TurmaList: React.FC = () => {
           <Form.Item
             name="nome"
             label="Nome"
-            rules={[{ required: true, message: 'Por favor, insira o nome da turma' }]}
+            rules={[{ required: true, message: 'Por favor, insira o nome' }]}
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             name="horario"
             label="Horário"
-            rules={[{ required: true, message: 'Por favor, insira o horário da turma' }]}
-          >
-            <Input placeholder="Ex: 19:00" />
-          </Form.Item>
-
-          <Form.Item
-            name="professor"
-            label="Professor"
-            rules={[{ required: true, message: 'Por favor, insira o nome do professor' }]}
+            rules={[{ required: true, message: 'Por favor, insira o horário' }]}
           >
             <Input />
           </Form.Item>
-
+          <Form.Item
+            name="professor"
+            label="Professor"
+            rules={[{ required: true, message: 'Por favor, insira o professor' }]}
+          >
+            <Input />
+          </Form.Item>
           <Form.Item
             name="observacao"
             label="Observação"
