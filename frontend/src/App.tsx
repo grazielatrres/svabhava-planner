@@ -2,6 +2,7 @@ import { Layout, Menu, Typography, Image } from 'antd';
 import styled from 'styled-components';
 import { Link, Route, Routes } from 'react-router-dom';
 import StudentList from './pages/StudentList';
+import TurmaList from './pages/TurmaList';
 import mindfulness from './assets/mindfulness.svg';
 
 
@@ -72,7 +73,7 @@ function App() {
           <Routes>
             <Route path="/" element={
               <HomeContainer>
-              <Image preview={false} src={mindfulness} alt="Logo" />
+                <Image preview={false} src={mindfulness} alt="Logo" />
                 <TitleContainer>
                   <Title style={{ fontSize: '2.5rem', color: '#ba6ac9', marginBottom: '1.5rem' }}>
                     Yoga Sva-Bhava
@@ -87,7 +88,7 @@ function App() {
               </HomeContainer>
             } />
             <Route path="/alunos" element={<StudentList />} />
-            <Route path="/turmas" element={<StudentList />} />
+            <Route path="/turmas" element={<TurmaList />} />
             <Route path="/schedule" element={<StudentList />} />
           </Routes>
         </StyledContent>
