@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, message, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Select, List, Tag } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusOutlined, UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import { Turma, turmaService } from '../services/turmaService';
+import { Student, studentService } from '../services/studentService';
 
 const { Column } = Table;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const TurmaList: React.FC = () => {
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [studentModalVisible, setStudentModalVisible] = useState(false);
+  const [selectedTurma, setSelectedTurma] = useState<Turma | null>(null);
   const [form] = Form.useForm();
+  const [studentForm] = Form.useForm();
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchTurmas = async () => {
@@ -25,8 +31,18 @@ const TurmaList: React.FC = () => {
     }
   };
 
+  const fetchStudents = async () => {
+    try {
+      const data = await studentService.getAll();
+      setStudents(data);
+    } catch (error) {
+      message.error('Erro ao carregar alunos');
+    }
+  };
+
   useEffect(() => {
     fetchTurmas();
+    fetchStudents();
   }, []);
 
   const handleCreate = async (values: Omit<Turma, 'id' | 'createdAt' | 'updatedAt' | 'alunos' | 'presencas'>) => {
@@ -65,6 +81,29 @@ const TurmaList: React.FC = () => {
     }
   };
 
+  const handleAddStudent = async (values: { alunoId: string }) => {
+    if (!selectedTurma) return;
+    try {
+      await turmaService.addAluno(selectedTurma.id, values.alunoId);
+      message.success('Aluno adicionado com sucesso');
+      setStudentModalVisible(false);
+      studentForm.resetFields();
+      fetchTurmas();
+    } catch (error) {
+      message.error('Erro ao adicionar aluno');
+    }
+  };
+
+  const handleRemoveStudent = async (turmaId: string, alunoId: string) => {
+    try {
+      await turmaService.removeAluno(turmaId, alunoId);
+      message.success('Aluno removido com sucesso');
+      fetchTurmas();
+    } catch (error) {
+      message.error('Erro ao remover aluno');
+    }
+  };
+
   const showModal = (turma?: Turma) => {
     if (turma) {
       setEditingId(turma.id);
@@ -81,6 +120,11 @@ const TurmaList: React.FC = () => {
     setModalVisible(true);
   };
 
+  const showStudentModal = (turma: Turma) => {
+    setSelectedTurma(turma);
+    setStudentModalVisible(true);
+  };
+
   const handleModalOk = () => {
     form.submit();
   };
@@ -89,6 +133,12 @@ const TurmaList: React.FC = () => {
     setModalVisible(false);
     form.resetFields();
     setEditingId(null);
+  };
+
+  const handleStudentModalCancel = () => {
+    setStudentModalVisible(false);
+    studentForm.resetFields();
+    setSelectedTurma(null);
   };
 
   return (
@@ -116,6 +166,47 @@ const TurmaList: React.FC = () => {
         rowKey="id"
         scroll={{ x: true }}
         style={{ width: '100%' }}
+        expandable={{
+          expandedRowRender: (record: Turma) => (
+            <div style={{ padding: '16px' }}>
+              <h3>Alunos da Turma</h3>
+              {record.alunos && record.alunos.length > 0 ? (
+                <List
+                  dataSource={record.alunos}
+                  renderItem={(aluno: any) => (
+                    <List.Item
+                      actions={[
+                        <Button
+                          type="text"
+                          danger
+                          icon={<UserDeleteOutlined />}
+                          onClick={() => handleRemoveStudent(record.id, aluno.id)}
+                        >
+                          Remover
+                        </Button>
+                      ]}
+                    >
+                      <List.Item.Meta
+                        title={aluno.nome}
+                        description={aluno.email}
+                      />
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <p>Nenhum aluno matriculado</p>
+              )}
+              <Button
+                type="primary"
+                icon={<UserAddOutlined />}
+                onClick={() => showStudentModal(record)}
+                style={{ marginTop: '16px' }}
+              >
+                Adicionar Aluno
+              </Button>
+            </div>
+          ),
+        }}
       >
         <Column title="Nome" dataIndex="nome" key="nome" />
         <Column title="Horário" dataIndex="horario" key="horario" />
@@ -186,6 +277,41 @@ const TurmaList: React.FC = () => {
             label="Observação"
           >
             <TextArea rows={4} />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="Adicionar Aluno à Turma"
+        open={studentModalVisible}
+        onOk={() => studentForm.submit()}
+        onCancel={handleStudentModalCancel}
+        okText="Adicionar"
+        cancelText="Cancelar"
+      >
+        <Form
+          form={studentForm}
+          layout="vertical"
+          onFinish={handleAddStudent}
+        >
+          <Form.Item
+            name="alunoId"
+            label="Aluno"
+            rules={[{ required: true, message: 'Por favor, selecione um aluno' }]}
+          >
+            <Select
+              placeholder="Selecione um aluno"
+              showSearch
+              optionFilterProp="children"
+            >
+              {students
+                .filter(student => !selectedTurma?.alunos?.some(aluno => aluno.id === student.id))
+                .map(student => (
+                  <Option key={student.id} value={student.id}>
+                    {student.nome} - {student.email}
+                  </Option>
+                ))}
+            </Select>
           </Form.Item>
         </Form>
       </Modal>
