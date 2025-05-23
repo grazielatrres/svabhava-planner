@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, message, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Tag } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusOutlined, DollarOutlined } from '@ant-design/icons';
 import { Student, studentService } from '../services/studentService';
+import { paymentService, Payment } from '../services/paymentService';
+import dayjs from 'dayjs';
 
 const { Column } = Table;
 
@@ -9,6 +11,10 @@ const StudentList: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [paymentHistoryVisible, setPaymentHistoryVisible] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [paymentHistory, setPaymentHistory] = useState<Payment[]>([]);
+  const [paymentHistoryLoading, setPaymentHistoryLoading] = useState(false);
   const [form] = Form.useForm();
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -89,6 +95,53 @@ const StudentList: React.FC = () => {
     setEditingId(null);
   };
 
+  const showPaymentHistory = async (student: Student) => {
+    setSelectedStudent(student);
+    setPaymentHistoryVisible(true);
+    setPaymentHistoryLoading(true);
+    try {
+      const payments = await paymentService.getByAluno(student.id);
+      setPaymentHistory(payments);
+    } catch (error) {
+      message.error('Erro ao carregar histórico de pagamentos');
+    } finally {
+      setPaymentHistoryLoading(false);
+    }
+  };
+
+  const paymentHistoryColumns = [
+    {
+      title: 'Data',
+      dataIndex: 'data',
+      key: 'data',
+      render: (data: string) => dayjs(data).format('DD/MM/YYYY'),
+    },
+    {
+      title: 'Valor',
+      dataIndex: 'valor',
+      key: 'valor',
+      render: (valor: number) => `R$ ${Number(valor)?.toFixed(2)}`,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status: string) => {
+        const colors = {
+          pendente: 'warning',
+          pago: 'success',
+          atrasado: 'error'
+        };
+        return <Tag color={colors[status as keyof typeof colors]}>{status.toUpperCase()}</Tag>;
+      },
+    },
+    {
+      title: 'Observação',
+      dataIndex: 'observacao',
+      key: 'observacao',
+    },
+  ];
+
   return (
     <div
       style={{
@@ -123,6 +176,11 @@ const StudentList: React.FC = () => {
           key="actions"
           render={(_, record: Student) => (
             <Space size="middle">
+              <Button
+                type="primary"
+                icon={<DollarOutlined />}
+                onClick={() => showPaymentHistory(record)}
+              />
               <Button
                 type="primary"
                 icon={<EditOutlined />}
@@ -177,6 +235,22 @@ const StudentList: React.FC = () => {
             <Input />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title={`Histórico de Pagamentos - ${selectedStudent?.nome}`}
+        open={paymentHistoryVisible}
+        onCancel={() => setPaymentHistoryVisible(false)}
+        footer={null}
+        width={800}
+      >
+        <Table
+          columns={paymentHistoryColumns}
+          dataSource={paymentHistory}
+          loading={paymentHistoryLoading}
+          rowKey="id"
+          pagination={false}
+        />
       </Modal>
     </div>
   );
