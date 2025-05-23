@@ -136,6 +136,7 @@ const TurmaList: React.FC = () => {
       form.setFieldsValue({
         nome: turma.nome,
         horario: turma.horario,
+        data_aula: turma.data_aula.split('T')[0],
         professor: turma.professor,
         observacao: turma.observacao,
       });
@@ -255,6 +256,8 @@ const TurmaList: React.FC = () => {
       >
         <Column title="Nome" dataIndex="nome" key="nome" />
         <Column title="Horário" dataIndex="horario" key="horario" />
+        <Column title="Data da Aula" dataIndex="data_aula" key="data_aula" 
+          render={(date) => new Date(date).toLocaleDateString('pt-BR')} />
         <Column title="Professor" dataIndex="professor" key="professor" />
         <Column title="Observação" dataIndex="observacao" key="observacao" />
         <Column
@@ -306,6 +309,13 @@ const TurmaList: React.FC = () => {
             rules={[{ required: true, message: 'Por favor, insira o horário' }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            name="data_aula"
+            label="Data da Aula"
+            rules={[{ required: true, message: 'Por favor, insira a data da aula' }]}
+          >
+            <Input type="date" />
           </Form.Item>
           <Form.Item
             name="professor"

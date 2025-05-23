@@ -5,23 +5,23 @@ import { Turma } from './Turma';
 @Entity('presencas')
 export class Presenca {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @ManyToOne(() => Aluno, aluno => aluno.presencas)
-    aluno: Aluno;
+    aluno!: Aluno;
 
     @ManyToOne(() => Turma, turma => turma.presencas)
-    turma: Turma;
+    turma!: Turma;
 
     @Column()
-    presente: boolean;
+    presente!: boolean;
 
     @Column()
-    data: Date;
+    data!: Date;
 
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updatedAt!: Date;
 } 

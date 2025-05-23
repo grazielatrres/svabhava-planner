@@ -44,7 +44,7 @@ function App() {
         <StyledHeader>
           <Menu mode="horizontal" style={{ border: 'none' }}>
             <Menu.Item key="home">
-              <Link to="/">Início</Link>
+              <Link to="/">Dashboard</Link>
             </Menu.Item>
             <Menu.Item key="students">
               <Link to="/alunos">Alunos</Link>
@@ -55,9 +55,6 @@ function App() {
             <Menu.Item key="payments">
               <Link to="/pagamentos">Pagamentos</Link>
             </Menu.Item>
-            <Menu.Item key="schedule">
-              <Link to="/schedule">Agenda</Link>
-            </Menu.Item>
           </Menu>
         </StyledHeader>
 
@@ -67,7 +64,6 @@ function App() {
             <Route path="/alunos" element={<StudentList />} />
             <Route path="/turmas" element={<TurmaList />} />
             <Route path="/pagamentos" element={<PaymentList />} />
-            <Route path="/schedule" element={<StudentList />} />
           </Routes>
         </StyledContent>
       </Layout>

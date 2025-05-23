@@ -13,6 +13,9 @@ export class Turma {
     @Column()
     horario!: string;
 
+    @Column({ type: 'date' })
+    data_aula!: Date;
+
     @Column()
     professor!: string;
 

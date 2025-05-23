@@ -26,16 +26,17 @@ export class TurmaController {
 
   static async createTurma(req: Request, res: Response) {
     try {
-      const { nome, horario, professor, observacao } = req.body;
-      if (!nome || !horario || !professor) {
-        return res.status(400).json({ error: 'Nome, horário e professor são obrigatórios' });
+      const { nome, horario, professor, observacao, data_aula } = req.body;
+      if (!nome || !horario || !professor || !data_aula) {
+        return res.status(400).json({ error: 'Nome, horário, professor e data da aula são obrigatórios' });
       }
 
       const turmaData: Omit<Turma, 'id' | 'createdAt' | 'updatedAt' | 'alunos' | 'presencas'> = {
         nome,
         horario,
         professor,
-        observacao
+        observacao,
+        data_aula: new Date(data_aula)
       };
 
       const turma = await TurmaRepository.create(turmaData);
@@ -47,12 +48,13 @@ export class TurmaController {
 
   static async updateTurma(req: Request, res: Response) {
     try {
-      const { nome, horario, professor, observacao } = req.body;
+      const { nome, horario, professor, observacao, data_aula } = req.body;
       const turma = await TurmaRepository.update(req.params.id, {
         nome,
         horario,
         professor,
-        observacao
+        observacao,
+        data_aula: data_aula ? new Date(data_aula) : undefined
       });
 
       if (!turma) {

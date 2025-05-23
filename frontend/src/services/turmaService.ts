@@ -5,6 +5,7 @@ export interface Turma {
   id: string;
   nome: string;
   horario: string;
+  data_aula: string;
   professor: string;
   observacao?: string;
   alunos?: any[];

@@ -117,7 +117,7 @@ const PaymentList: React.FC = () => {
       render: (valor: number) => `R$ ${Number(valor)?.toFixed(2)}`,
     },
     {
-      title: 'Data',
+      title: 'Data de vencimento',
       dataIndex: 'data',
       key: 'data',
       render: (data: string) => new Date(data).toLocaleDateString(),
@@ -229,7 +229,7 @@ const PaymentList: React.FC = () => {
 
           <Form.Item
             name="data"
-            label="Data"
+            label="Data de vencimento"
             rules={[{ required: true, message: 'Por favor, selecione a data' }]}
           >
             <DatePicker style={{ width: '100%' }} />

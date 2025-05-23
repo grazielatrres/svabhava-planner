@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Statistic, Table, Typography, Spin, message } from 'antd';
+import { Row, Col, Card, Statistic, Table, Typography, Spin, message, Tag } from 'antd';
 import { UserOutlined, TeamOutlined, CalendarOutlined, WarningOutlined } from '@ant-design/icons';
 import { turmaService } from '../services/turmaService';
 import { studentService } from '../services/studentService';
 import { presencaService } from '../services/presencaService';
+import { paymentService, Payment } from '../services/paymentService';
 import { Turma } from '../services/turmaService';
-import { Student } from '../services/studentService';
 import { Presenca } from '../services/presencaService';
 import styled from 'styled-components';
 
@@ -49,7 +49,7 @@ interface DashboardStats {
   taxaOcupacao: number;
   totalAusencias: number;
   turmasRecentes: Turma[];
-  alunosRecentes: Student[];
+  pagamentosPendentes: Payment[];
 }
 
 const Home: React.FC = () => {
@@ -60,75 +60,67 @@ const Home: React.FC = () => {
     taxaOcupacao: 0,
     totalAusencias: 0,
     turmasRecentes: [],
-    alunosRecentes: []
+    pagamentosPendentes: []
   });
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const turmas = await turmaService.getAll();
-        const alunos = await studentService.getAll();
-        const presencas = await presencaService.getAllPresencas();
-        const totalTurmas = turmas.length;
-        const totalAlunos = alunos.length;
-        
-        const totalAlunosEmTurmas = turmas.reduce((acc, turma) => 
-          acc + (turma.alunos?.length || 0), 0);
-        const taxaOcupacao = totalTurmas > 0 
-          ? (totalAlunosEmTurmas / totalTurmas) 
-          : 0;
+        const [turmas, alunos, presencas, pagamentos] = await Promise.all([
+          turmaService.getAll(),
+          studentService.getAll(),
+          presencaService.getAllPresencas(),
+          paymentService.getAll()
+        ]);
 
+        // Ordenar turmas por data_aula (mais próxima primeiro)
+        const turmasOrdenadas = [...turmas].sort((a, b) => {
+          return new Date(a.data_aula).getTime() - new Date(b.data_aula).getTime();
+        });
+
+        // Filtrar pagamentos pendentes e atrasados
+        const pagamentosPendentes = pagamentos
+          .filter(p => p.status === 'pendente' || p.status === 'atrasado')
+          .sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+
+        // Calcular estatísticas
         const totalAusencias = presencas.filter((p: Presenca) => !p.presente).length;
-
-        const turmasRecentes = turmas
-          .sort((a, b) => b.id.localeCompare(a.id))
-          .slice(0, 5);
-
-        const alunosRecentes = alunos
-          .sort((a, b) => b.id.localeCompare(a.id))
-          .slice(0, 5);
+        const taxaOcupacao = turmas.reduce((acc, turma) => {
+          const alunosNaTurma = turma.alunos?.length || 0;
+          return acc + (alunosNaTurma / 20); // Assumindo capacidade máxima de 20 alunos
+        }, 0) / turmas.length * 100;
 
         setStats({
-          totalTurmas,
-          totalAlunos,
-          taxaOcupacao,
+          totalTurmas: turmas.length,
+          totalAlunos: alunos.length,
+          taxaOcupacao: Math.round(taxaOcupacao),
           totalAusencias,
-          turmasRecentes,
-          alunosRecentes
+          turmasRecentes: turmasOrdenadas.slice(0, 5), // 5 turmas mais próximas
+          pagamentosPendentes: pagamentosPendentes.slice(0, 5) // 5 pagamentos mais próximos do vencimento
         });
-      } catch (error: any) {
-        console.error('Erro ao carregar dados do dashboard:', error);
-        if (error.response) {
-          console.error('Detalhes do erro:', {
-            status: error.response.status,
-            data: error.response.data,
-            headers: error.response.headers
-          });
-        } else if (error.request) {
-          console.error('Erro na requisição:', error.request);
-        } else {
-          console.error('Erro:', error.message);
-        }
-        message.error('Erro ao carregar dados do dashboard. Por favor, tente novamente.');
+      } catch (error) {
+        message.error('Erro ao carregar dados do dashboard');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDashboardData();
+    fetchData();
   }, []);
 
-  const turmasColumns = [
+  const columns = [
     {
       title: 'Nome',
       dataIndex: 'nome',
       key: 'nome',
     },
     {
-      title: 'Professor',
-      dataIndex: 'professor',
-      key: 'professor',
+      title: 'Data da Aula',
+      dataIndex: 'data_aula',
+      key: 'data_aula',
+      render: (date: string) => new Date(date).toLocaleDateString('pt-BR'),
+      sorter: (a: Turma, b: Turma) => new Date(a.data_aula).getTime() - new Date(b.data_aula).getTime()
     },
     {
       title: 'Horário',
@@ -136,29 +128,42 @@ const Home: React.FC = () => {
       key: 'horario',
     },
     {
-      title: 'Alunos',
-      dataIndex: 'alunos',
-      key: 'alunos',
-      render: (alunos: any[]) => alunos?.length || 0,
-    },
+      title: 'Professor',
+      dataIndex: 'professor',
+      key: 'professor',
+    }
   ];
 
-  const alunosColumns = [
+  const pagamentosColumns = [
     {
-      title: 'Nome',
-      dataIndex: 'nome',
-      key: 'nome',
+      title: 'Aluno',
+      dataIndex: ['aluno', 'nome'],
+      key: 'aluno',
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: 'Valor',
+      dataIndex: 'valor',
+      key: 'valor',
+      render: (valor: number) => `R$ ${Number(valor)?.toFixed(2)}`,
     },
     {
-      title: 'Telefone',
-      dataIndex: 'telefone',
-      key: 'telefone',
+      title: 'Data de vencimento',
+      dataIndex: 'data',
+      key: 'data',
+      render: (data: string) => new Date(data).toLocaleDateString('pt-BR'),
     },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status: string) => {
+        const colors = {
+          pendente: 'warning',
+          atrasado: 'error'
+        };
+        return <Tag color={colors[status as keyof typeof colors]}>{status.toUpperCase()}</Tag>;
+      },
+    }
   ];
 
   if (loading) {
@@ -171,38 +176,38 @@ const Home: React.FC = () => {
 
   return (
     <DashboardContainer>
-      <Title level={2} style={{ marginBottom: '24px', color: '#333' }}>Dashboard</Title>
-
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12} lg={6}>
+      <Title level={2}>Dashboard</Title>
+      
+      <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
+        <Col xs={24} sm={12} md={6}>
           <StyledCard>
             <Statistic
               title="Total de Turmas"
               value={stats.totalTurmas}
-              prefix={<CalendarOutlined />}
-            />
-          </StyledCard>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <StyledCard>
-            <Statistic
-              title="Total de Alunos"
-              value={stats.totalAlunos}
               prefix={<TeamOutlined />}
             />
           </StyledCard>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} md={6}>
           <StyledCard>
             <Statistic
-              title="Taxa de Ocupação"
-              value={stats.taxaOcupacao.toFixed(1)}
-              suffix="alunos/turma"
+              title="Total de Alunos"
+              value={stats.totalAlunos}
               prefix={<UserOutlined />}
             />
           </StyledCard>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} md={6}>
+          <StyledCard>
+            <Statistic
+              title="Taxa de Ocupação"
+              value={stats.taxaOcupacao}
+              suffix="%"
+              prefix={<CalendarOutlined />}
+            />
+          </StyledCard>
+        </Col>
+        <Col xs={24} sm={12} md={6}>
           <StyledCard>
             <Statistic
               title="Total de Ausências"
@@ -213,12 +218,12 @@ const Home: React.FC = () => {
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]} style={{ marginTop: '24px' }}>
+      <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <StyledTableCard title="Turmas Recentes">
+          <StyledTableCard title="Próximas Aulas">
             <Table
               dataSource={stats.turmasRecentes}
-              columns={turmasColumns}
+              columns={columns}
               rowKey="id"
               pagination={false}
               size="small"
@@ -226,10 +231,10 @@ const Home: React.FC = () => {
           </StyledTableCard>
         </Col>
         <Col xs={24} lg={12}>
-          <StyledTableCard title="Alunos Recentes">
+          <StyledTableCard title="Pagamentos Pendentes">
             <Table
-              dataSource={stats.alunosRecentes}
-              columns={alunosColumns}
+              dataSource={stats.pagamentosPendentes}
+              columns={pagamentosColumns}
               rowKey="id"
               pagination={false}
               size="small"
