@@ -171,9 +171,6 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 - **API Versioning** - Versionamento de endpoints para compatibilidade
 - **Error Handling** - Tratamento padronizado de erros e exceções
 
-// ... existing code ...
-![Editor  Mermaid Chart-2025-04-25-200925 (1)](https://github.com/user-attachments/assets/94513c45-76c1-41b4-8f47-dbf60aa05d18)
-
 ## 🗄️ Banco de Dados
 
 ### Tecnologia
