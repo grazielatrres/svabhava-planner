@@ -1,9 +1,10 @@
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu } from 'antd';
 import styled from 'styled-components';
 import { Link, Route, Routes } from 'react-router-dom';
 import StudentList from './pages/StudentList';
 import TurmaList from './pages/TurmaList';
 import Home from './pages/Home';
+import PaymentList from './pages/PaymentList';
 
 const { Header, Content } = Layout;
 
@@ -51,6 +52,9 @@ function App() {
             <Menu.Item key="turmas">
               <Link to="/turmas">Turmas</Link>
             </Menu.Item>
+            <Menu.Item key="payments">
+              <Link to="/pagamentos">Pagamentos</Link>
+            </Menu.Item>
             <Menu.Item key="schedule">
               <Link to="/schedule">Agenda</Link>
             </Menu.Item>
@@ -62,6 +66,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/alunos" element={<StudentList />} />
             <Route path="/turmas" element={<TurmaList />} />
+            <Route path="/pagamentos" element={<PaymentList />} />
             <Route path="/schedule" element={<StudentList />} />
           </Routes>
         </StyledContent>

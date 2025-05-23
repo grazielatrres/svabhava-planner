@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Select, List, Tag, Switch, DatePicker } from 'antd';
+import { Table, Button, Space, Modal, Form, Input, message, Popconfirm, Select, List, Tag, Switch } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, UserAddOutlined, UserDeleteOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Turma, turmaService } from '../services/turmaService';
 import { Student, studentService } from '../services/studentService';
 import { Presenca, presencaService } from '../services/presencaService';
-import dayjs from 'dayjs';
 
 const { Column } = Table;
 const { TextArea } = Input;
