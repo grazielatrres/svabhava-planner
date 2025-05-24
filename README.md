@@ -105,7 +105,11 @@ RNF15: O sistema deve exibir em formato de calendário ou lista todas as turmas 
 
 ## 📊 Modelagem
 ![Editor  Mermaid Chart-2025-04-25-200925 (1)](https://github.com/user-attachments/assets/94513c45-76c1-41b4-8f47-dbf60aa05d18)
-![image](https://github.com/user-attachments/assets/8312592d-f26d-4036-a003-f788d8502241)
+
+![image](https://github.com/user-attachments/assets/0588e0df-64b0-43cb-a5fe-4f7e761d1191)
+
+![image](https://github.com/user-attachments/assets/bd509cd8-7f4b-4a28-a3c2-8b2ace67626d)
+
 
 
 ## 🔧 Instalação e Uso
@@ -180,38 +184,8 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 ### Modelo de Dados
 O sistema utiliza um modelo relacional com as seguintes entidades principais:
 
-- **Alunos**
-  - Informações pessoais (nome, email, telefone, endereço)
-  - Observações
-  - Relacionamentos com presenças e pagamentos
+![image](https://github.com/user-attachments/assets/29362b34-86fc-4857-9bc0-4320d8b6edb5)
 
-- **Turmas**
-  - Nome da turma
-  - Horário
-  - Data da aula
-  - Professor
-  - Relacionamento muitos-para-muitos com alunos
-  - Observações
-
-- **Presenças**
-  - Registro de presença/ausência
-  - Data
-  - Relacionamentos com aluno e turma
-
-- **Pagamentos**
-  - Valor
-  - Data
-  - Status (pendente, pago, atrasado)
-  - Observações
-  - Relacionamento com aluno
-
-### Características
-- Banco de dados MySQL com suporte a transações ACID
-- ORM TypeORM para mapeamento objeto-relacional
-- Índices otimizados para consultas frequentes
-- Relacionamentos bem definidos entre entidades
-- Timestamps automáticos (createdAt, updatedAt)
-- UUID como chave primária para todas as entidades
 
 ## 📄 Licença
 Este é um projeto acadêmico desenvolvido para fins educacionais e sociais como parte da disciplina de PROJETO DE APRENDIZAGEM COLABORATIVA EXTENSIONISTA (PAC) do curso de Engenharia de Software doCentro Universitário Católica de Santa Catarina(Campus Joinville). Todo o código e documentação foram criados com propósito de aprendizagem e contribuição para a comunidade, demonstrando a aplicação prática do conhecimento acadêmico em benefício da sociedade sem fins lucrativos.
