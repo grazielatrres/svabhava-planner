@@ -88,7 +88,8 @@ RNF15: O sistema deve exibir em formato de calendário ou lista todas as turmas 
 
 
 ## 📊 Modelagem
-![Editor  Mermaid Chart-2025-04-25-200925 (1)](https://github.com/user-attachments/assets/94513c45-76c1-41b4-8f47-dbf60aa05d18)
+
+![image](https://github.com/user-attachments/assets/ff0ee924-508b-41bd-bc6e-240066ff6e89)
 
 ![image](https://github.com/user-attachments/assets/0588e0df-64b0-43cb-a5fe-4f7e761d1191)
 
