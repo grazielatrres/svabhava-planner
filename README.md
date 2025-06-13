@@ -22,22 +22,6 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 - Confirmações automáticas por e-mail
 - Interface responsiva e intuitiva
 
-## 🚀 Tecnologias Utilizadas
-
-### Core
-- **React 19** - Biblioteca JavaScript para construção de interfaces
-- **TypeScript** - Superset JavaScript com tipagem estática
-- **Vite** - Build tool e bundler moderno
-- **Node.js** - Runtime JavaScript
-
-### UI/UX
-- **Radix UI Themes** - Sistema de design robusto e acessível
-- **Styled Components** - Estilização com CSS-in-JS
-
-### Desenvolvimento
-- **ESLint** - Linting e padronização de código
-- **TypeScript ESLint** - Regras de linting específicas para TypeScript
-
 ## 💻 Requisitos do Sistema
 
 
@@ -137,43 +121,87 @@ O sistema é compatível com os seguintes navegadores:
 
 A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 - Desktops
-- Tablets
-- Smartphones
 
 ## 👥 Casos de Uso
 
-### Cadastro de Usuário
+### Cadastro de Usuário (Pendente)
 - Acesso à página de cadastro
 - Preenchimento de formulário
 - Validação de dados
 - Criação de conta
 - Confirmação por e-mail
 
-### Matrícula em Aula
-- Visualização de aulas disponíveis
-- Seleção de aula
-- Confirmação de matrícula
-- Notificação por e-mail
+### Gestão de turmas
+- Visualização das turmas cadastradas
+- Inclusão/Edição de turmas
+- Vincular aulo à aula
+- Registro de presença do aluno na turma
+- Notificação por e-mail - Pendente
 
-## 🛠 Padrões de Desenvolvimento
+### Gestão de pagamento
+- Visualizar pagamentos
+- Adicionar pagamentos pendentes, atrasados e pagos
+- Editar pagamentos
+- Remover alunos
+
+### Gestão de alunos
+- Adicionar novos alunos
+- Editar alunos existentes
+- Visualizar histórico de pagamento por aluno
+- Remover alunos
+
+Vou propor uma descrição atualizada que reflete a realidade do projeto:
+
+## 🛠 Padrões de Desenvolvimento e tecnologias utilizadas
 
 ### Arquitetura
-- **Clean Architecture** - Separação clara de responsabilidades e dependências
-- **Componentes Modulares** – Utilizando o padrão arquitetural MVC (Model-View-Controller) para estruturar os componentes da aplicação.​
+- **Clean Architecture (Backend)** - Separação clara de responsabilidades em controllers, services, repositories e models
+- **Component-Based Architecture (Frontend)** - Estrutura baseada em componentes React com separação em pages e components
 
-### Gestão de Estado
-- **Context API** - Gerenciamento de estado global da aplicação
-- **Custom Hooks** - Encapsulamento de lógica reutilizável
-- **Immutability Helpers** - Manipulação segura de estado
+### Frontend
+- **React com TypeScript** - Desenvolvimento com tipagem forte e componentes funcionais
+- **Ant Design** - UI components para interface consistente
+- **Styled Components** - Estilização com CSS-in-JS
+- **React Router** - Roteamento da aplicação
+
+### Backend
+- **Express.js** - Framework para construção da API REST
+- **TypeORM** - ORM para gerenciamento de banco de dados
+- **Migrations** - Sistema de migrações para controle de versão do banco de dados
 
 ### Padrões de Código
-- **ESLint Rules** - Padronização de código seguindo melhores práticas
-- **TypeScript Strict Mode** - Tipo forte e verificação estática
+- **TypeScript Strict Mode** - Tipo forte e verificação estática em ambos frontend e backend
+- **ESLint** - Padronização de código no frontend
+- **Decorators** - Uso de decorators para metadados e configuração (TypeORM)
 
 ### API e Integração
-- **REST Architecture** - Endpoints seguindo padrões RESTful
-- **API Versioning** - Versionamento de endpoints para compatibilidade
-- **Error Handling** - Tratamento padronizado de erros e exceções
+- **REST Architecture** - Endpoints RESTful com separação clara de responsabilidades
+- **Axios** - Cliente HTTP para comunicação com a API
+- **CORS** - Configuração de segurança para requisições cross-origin
+
+### Estrutura de Diretórios
+
+#### Frontend
+```
+src/
+├── assets/      # Recursos estáticos
+├── components/  # Componentes reutilizáveis
+├── pages/       # Páginas da aplicação
+├── services/    # Serviços de API
+└── contexts/    # (Preparado para Context API)
+```
+
+#### Backend
+```
+src/
+├── config/      # Configurações da aplicação
+├── controllers/ # Controladores da API
+├── models/      # Modelos de dados
+├── services/    # Lógica de negócio
+├── repositories/# Acesso a dados
+├── routes/      # Definição de rotas
+├── middlewares/ # Middlewares da aplicação
+└── interfaces/  # Definições de tipos
 
 ## 🗄️ Banco de Dados
 
