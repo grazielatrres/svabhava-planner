@@ -68,6 +68,7 @@ RNF4: A interface deve ser clara, com fluxos simples e linguagem acessível à i
 RNF5: O código deve seguir boas práticas (componentização, comentários, organização) para facilitar futuras manutenções e melhorias.
 
 RNF6: O sistema deve permitir que a instrutora acesse de diferentes dispositivos ao mesmo tempo, sem conflitos de dados.
+
 RNF7: O sistema deve funcionar corretamente nos principais navegadores: Chrome, Firefox, Safari e Edge.
 
 RNF8: Deve evitar requisições desnecessárias, usar cache onde possível e carregar dados de forma eficiente.
