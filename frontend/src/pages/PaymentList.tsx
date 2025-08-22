@@ -1,22 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Modal, Form, Input, InputNumber, Select, message, Tag, DatePicker } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { paymentService, Payment } from '../services/paymentService';
-import { studentService, Student } from '../services/studentService';
-import styled from 'styled-components';
-import dayjs from 'dayjs';
+import React, { useEffect, useState } from "react";
+import {
+  Table,
+  Button,
+  Space,
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  message,
+  Tag,
+  DatePicker,
+} from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { paymentService, Payment } from "../services/paymentService";
+import { studentService, Student } from "../services/studentService";
+import styled from "styled-components";
+import dayjs from "dayjs";
 
 const { Option } = Select;
 
-const Container = styled.div`
-  padding: 24px;
-  width: 90%;
-  max-width: 1400px;
-  margin: 40px auto;
-  background: rgba(255,255,255,0.8);
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-`;
+// const Container = styled.div`
+//   padding: 24px;
+//   width: 90%;
+//   max-width: 1400px;
+//   margin: 40px auto;
+//   background: rgba(255,255,255,0.8);
+//   border-radius: 12px;
+//   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+// `;
 
 const PaymentList: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -32,7 +44,7 @@ const PaymentList: React.FC = () => {
       const data = await paymentService.getAll();
       setPayments(data);
     } catch (error) {
-      message.error('Erro ao carregar pagamentos');
+      message.error("Erro ao carregar pagamentos");
     } finally {
       setLoading(false);
     }
@@ -43,7 +55,7 @@ const PaymentList: React.FC = () => {
       const data = await studentService.getAll();
       setStudents(data);
     } catch (error) {
-      message.error('Erro ao carregar alunos');
+      message.error("Erro ao carregar alunos");
     }
   };
 
@@ -65,7 +77,7 @@ const PaymentList: React.FC = () => {
       valor: payment.valor,
       status: payment.status,
       data: dayjs(payment.data),
-      observacao: payment.observacao
+      observacao: payment.observacao,
     });
     setModalVisible(true);
   };
@@ -73,10 +85,10 @@ const PaymentList: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await paymentService.delete(id);
-      message.success('Pagamento excluído com sucesso');
+      message.success("Pagamento excluído com sucesso");
       fetchPayments();
     } catch (error) {
-      message.error('Erro ao excluir pagamento');
+      message.error("Erro ao excluir pagamento");
     }
   };
 
@@ -85,9 +97,9 @@ const PaymentList: React.FC = () => {
       if (editingPayment) {
         await paymentService.update(editingPayment.id, {
           ...values,
-          data: values.data.toISOString()
+          data: values.data.toISOString(),
         });
-        message.success('Pagamento atualizado com sucesso');
+        message.success("Pagamento atualizado com sucesso");
       } else {
         await paymentService.create(
           values.alunoId,
@@ -95,54 +107,58 @@ const PaymentList: React.FC = () => {
           values.data.toDate(),
           values.observacao
         );
-        message.success('Pagamento criado com sucesso');
+        message.success("Pagamento criado com sucesso");
       }
       setModalVisible(false);
       fetchPayments();
     } catch (error) {
-      message.error('Erro ao salvar pagamento');
+      message.error("Erro ao salvar pagamento");
     }
   };
 
   const columns = [
     {
-      title: 'Aluno',
-      dataIndex: ['aluno', 'nome'],
-      key: 'aluno',
+      title: "Aluno",
+      dataIndex: ["aluno", "nome"],
+      key: "aluno",
     },
     {
-      title: 'Valor',
-      dataIndex: 'valor',
-      key: 'valor',
+      title: "Valor",
+      dataIndex: "valor",
+      key: "valor",
       render: (valor: number) => `R$ ${Number(valor)?.toFixed(2)}`,
     },
     {
-      title: 'Data de vencimento',
-      dataIndex: 'data',
-      key: 'data',
+      title: "Data de vencimento",
+      dataIndex: "data",
+      key: "data",
       render: (data: string) => new Date(data).toLocaleDateString(),
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status: string) => {
         const colors = {
-          pendente: 'warning',
-          pago: 'success',
-          atrasado: 'error'
+          pendente: "warning",
+          pago: "success",
+          atrasado: "error",
         };
-        return <Tag color={colors[status as keyof typeof colors]}>{status.toUpperCase()}</Tag>;
+        return (
+          <Tag color={colors[status as keyof typeof colors]}>
+            {status.toUpperCase()}
+          </Tag>
+        );
       },
     },
     {
-      title: 'Observação',
-      dataIndex: 'observacao',
-      key: 'observacao',
+      title: "Observação",
+      dataIndex: "observacao",
+      key: "observacao",
     },
     {
-      title: 'Ações',
-      key: 'acoes',
+      title: "Ações",
+      key: "acoes",
       render: (_: any, record: Payment) => (
         <Space>
           <Button
@@ -167,11 +183,7 @@ const PaymentList: React.FC = () => {
   return (
     <Container>
       <div style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={handleCreate}
-        >
+        <Button type="primary" icon={<PlusOutlined />} onClick={handleCreate}>
           Novo Pagamento
         </Button>
       </div>
@@ -184,28 +196,26 @@ const PaymentList: React.FC = () => {
       />
 
       <Modal
-        title={editingPayment ? 'Editar Pagamento' : 'Novo Pagamento'}
+        title={editingPayment ? "Editar Pagamento" : "Novo Pagamento"}
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-        >
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           {!editingPayment && (
             <Form.Item
               name="alunoId"
               label="Aluno"
-              rules={[{ required: true, message: 'Por favor, selecione um aluno' }]}
+              rules={[
+                { required: true, message: "Por favor, selecione um aluno" },
+              ]}
             >
               <Select
                 placeholder="Selecione um aluno"
                 showSearch
                 optionFilterProp="children"
               >
-                {students.map(student => (
+                {students.map((student) => (
                   <Option key={student.id} value={student.id}>
                     {student.nome} - {student.email}
                   </Option>
@@ -217,11 +227,11 @@ const PaymentList: React.FC = () => {
           <Form.Item
             name="valor"
             label="Valor"
-            rules={[{ required: true, message: 'Por favor, insira o valor' }]}
+            rules={[{ required: true, message: "Por favor, insira o valor" }]}
           >
             <InputNumber
               prefix="R$"
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               precision={2}
               min={0}
             />
@@ -230,15 +240,17 @@ const PaymentList: React.FC = () => {
           <Form.Item
             name="data"
             label="Data de vencimento"
-            rules={[{ required: true, message: 'Por favor, selecione a data' }]}
+            rules={[{ required: true, message: "Por favor, selecione a data" }]}
           >
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
 
           <Form.Item
             name="status"
             label="Status"
-            rules={[{ required: true, message: 'Por favor, selecione o status' }]}
+            rules={[
+              { required: true, message: "Por favor, selecione o status" },
+            ]}
           >
             <Select>
               <Option value="pendente">Pendente</Option>
@@ -247,21 +259,16 @@ const PaymentList: React.FC = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="observacao"
-            label="Observação"
-          >
+          <Form.Item name="observacao" label="Observação">
             <Input.TextArea />
           </Form.Item>
 
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit">
-                {editingPayment ? 'Atualizar' : 'Criar'}
+                {editingPayment ? "Atualizar" : "Criar"}
               </Button>
-              <Button onClick={() => setModalVisible(false)}>
-                Cancelar
-              </Button>
+              <Button onClick={() => setModalVisible(false)}>Cancelar</Button>
             </Space>
           </Form.Item>
         </Form>
@@ -270,4 +277,4 @@ const PaymentList: React.FC = () => {
   );
 };
 
-export default PaymentList; 
+export default PaymentList;
