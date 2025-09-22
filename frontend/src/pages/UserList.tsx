@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Button, Space, message } from 'antd';
-import { PlusOutlined, UserOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Column } = Table;
 
