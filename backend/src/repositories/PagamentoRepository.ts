@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/database';
 import { Pagamento } from '../models/Pagamento';
-import { Aluno } from '../models/Aluno';
+import { Aluno } from '../models/aluno';
 
 export class PagamentoRepository {
     private static repository = AppDataSource.getRepository(Pagamento);
