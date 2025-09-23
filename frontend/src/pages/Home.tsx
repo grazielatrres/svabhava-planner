@@ -46,7 +46,7 @@ const StyledTableCard = styled(Card)`
 interface DashboardStats {
   totalTurmas: number;
   totalAlunos: number;
-  taxaOcupacao: number;
+  taxaPresenca: number;
   totalAusencias: number;
   turmasRecentes: Turma[];
   pagamentosPendentes: Payment[];
@@ -57,7 +57,7 @@ const Home: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalTurmas: 0,
     totalAlunos: 0,
-    taxaOcupacao: 0,
+    taxaPresenca: 0,
     totalAusencias: 0,
     turmasRecentes: [],
     pagamentosPendentes: []
@@ -86,15 +86,18 @@ const Home: React.FC = () => {
 
         // Calcular estatísticas
         const totalAusencias = presencas.filter((p: Presenca) => !p.presente).length;
-        const taxaOcupacao = turmas.reduce((acc, turma) => {
-          const alunosNaTurma = turma.alunos?.length || 0;
-          return acc + (alunosNaTurma / 20); // Assumindo capacidade máxima de 20 alunos
-        }, 0) / turmas.length * 100;
+        const totalPresencas = presencas.filter((p: Presenca) => p.presente).length;
+        
+        // Calcular taxa de presença
+        let taxaPresenca = 0;
+        if (presencas.length > 0) {
+          taxaPresenca = (totalPresencas / presencas.length) * 100;
+        }
 
         setStats({
           totalTurmas: turmas.length,
           totalAlunos: alunos.length,
-          taxaOcupacao: Math.round(taxaOcupacao),
+          taxaPresenca: Math.round(taxaPresenca),
           totalAusencias,
           turmasRecentes: turmasOrdenadas.slice(0, 5), // 5 turmas mais próximas
           pagamentosPendentes: pagamentosPendentes.slice(0, 5) // 5 pagamentos mais próximos do vencimento
@@ -200,8 +203,8 @@ const Home: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <StyledCard>
             <Statistic
-              title="Taxa de Ocupação"
-              value={stats.taxaOcupacao}
+              title="Taxa de Presença"
+              value={stats.taxaPresenca}
               suffix="%"
               prefix={<CalendarOutlined />}
             />

@@ -9,7 +9,7 @@ export class AlunoRepository {
         return this.repository.find();
     }
 
-    static async findById(id: string): Promise<Aluno | null> {
+    static async findById(id: number): Promise<Aluno | null> {
         return this.repository.findOneBy({ id });
     }
 
@@ -18,7 +18,7 @@ export class AlunoRepository {
         return this.repository.save(aluno);
     }
 
-    static async update(id: string, alunoData: Partial<Aluno>): Promise<Aluno | null> {
+    static async update(id: number, alunoData: Partial<Aluno>): Promise<Aluno | null> {
         const aluno = await this.findById(id);
         if (!aluno) return null;
 
@@ -26,7 +26,7 @@ export class AlunoRepository {
         return this.repository.save(aluno);
     }
 
-    static async delete(id: string): Promise<boolean> {
+    static async delete(id: number): Promise<boolean> {
         const result = await this.repository.delete(id);
         return result.affected !== 0;
     }

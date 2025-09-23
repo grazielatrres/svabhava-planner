@@ -7,13 +7,16 @@ import 'reflect-metadata';
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    password: '', 
-    database: 'svabhava_planner',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '3306'),
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || 'root', 
+    database: process.env.DB_NAME || 'svabhava',
     synchronize: false, 
+    
     logging: true,
+    connectTimeout: 60000,
+    acquireTimeout: 60000,
     entities: [Aluno, Turma, Presenca, Pagamento],
     subscribers: [],
     migrations: [],

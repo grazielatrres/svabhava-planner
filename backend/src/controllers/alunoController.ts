@@ -13,7 +13,7 @@ export class AlunoController {
 
     static async getAlunoById(req: Request, res: Response) {
         try {
-            const aluno = await AlunoRepository.findById(req.params.id);
+            const aluno = await AlunoRepository.findById(parseInt(req.params.id));
             if (!aluno) {
                 return res.status(404).json({ error: "Aluno not found" });
             }
@@ -47,7 +47,7 @@ export class AlunoController {
     static async updateAluno(req: Request, res: Response) {
         try {
             const { nome, email, telefone } = req.body;
-            const aluno = await AlunoRepository.update(req.params.id, {
+            const aluno = await AlunoRepository.update(parseInt(req.params.id), {
                 nome,
                 email,
                 telefone
@@ -65,7 +65,7 @@ export class AlunoController {
 
     static async deleteAluno(req: Request, res: Response) {
         try {
-            const success = await AlunoRepository.delete(req.params.id);
+            const success = await AlunoRepository.delete(parseInt(req.params.id));
             if (!success) {
                 return res.status(404).json({ error: "Aluno not found" });
             }

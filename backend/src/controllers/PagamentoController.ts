@@ -13,7 +13,7 @@ export class PagamentoController {
 
   static async getPagamentoById(req: Request, res: Response) {
     try {
-      const pagamento = await PagamentoRepository.findById(req.params.id);
+      const pagamento = await PagamentoRepository.findById(parseInt(req.params.id));
       if (!pagamento) {
         return res.status(404).json({ error: 'Pagamento not found' });
       }
@@ -25,7 +25,7 @@ export class PagamentoController {
 
   static async getPagamentosByAluno(req: Request, res: Response) {
     try {
-      const pagamentos = await PagamentoRepository.findByAluno(req.params.alunoId);
+      const pagamentos = await PagamentoRepository.findByAluno(parseInt(req.params.alunoId));
       res.json(pagamentos);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -51,7 +51,7 @@ export class PagamentoController {
         return res.status(400).json({ error: 'Valor é obrigatório' });
       }
 
-      const pagamento = await PagamentoRepository.registrarPagamento(alunoId, valor, observacao);
+      const pagamento = await PagamentoRepository.registrarPagamento(parseInt(alunoId), valor, observacao);
       res.status(201).json(pagamento);
     } catch (error) {
       if (error instanceof Error) {
@@ -72,7 +72,7 @@ export class PagamentoController {
         return res.status(400).json({ error: 'Valor é obrigatório' });
       }
 
-      const pagamento = await PagamentoRepository.registrarPagamentoPendente(alunoId, valor, observacao);
+      const pagamento = await PagamentoRepository.registrarPagamentoPendente(parseInt(alunoId), valor, observacao);
       res.status(201).json(pagamento);
     } catch (error) {
       if (error instanceof Error) {
@@ -87,7 +87,7 @@ export class PagamentoController {
   static async updatePagamento(req: Request, res: Response) {
     try {
       const { status, valor, observacao } = req.body;
-      const pagamento = await PagamentoRepository.update(req.params.id, {
+      const pagamento = await PagamentoRepository.update(parseInt(req.params.id), {
         status,
         valor,
         observacao
@@ -105,7 +105,7 @@ export class PagamentoController {
 
   static async deletePagamento(req: Request, res: Response) {
     try {
-      const success = await PagamentoRepository.delete(req.params.id);
+      const success = await PagamentoRepository.delete(parseInt(req.params.id));
       if (!success) {
         return res.status(404).json({ error: 'Pagamento not found' });
       }
