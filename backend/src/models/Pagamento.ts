@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { Aluno } from './Aluno';
+import { Aluno } from './aluno';
 
 @Entity('pagamentos')
 export class Pagamento {

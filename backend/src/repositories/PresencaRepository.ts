@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/database';
 import { Presenca } from '../models/Presenca';
-import { Aluno } from '../models/Aluno';
+import { Aluno } from '../models/aluno';
 import { Turma } from '../models/Turma';
 
 export class PresencaRepository {

@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Aluno } from '../models/Aluno';
+import { Aluno } from '../models/aluno';
 import { Turma } from '../models/Turma';
 import { Presenca } from '../models/Presenca';
 import { Pagamento } from '../models/Pagamento';

@@ -5,6 +5,7 @@ import StudentList from './pages/StudentList';
 import TurmaList from './pages/TurmaList';
 import Home from './pages/Home';
 import PaymentList from './pages/PaymentList';
+import UserList from './pages/UserList';
 
 const { Header, Content } = Layout;
 
@@ -55,6 +56,9 @@ function App() {
             <Menu.Item key="payments">
               <Link to="/pagamentos">Pagamentos</Link>
             </Menu.Item>
+            <Menu.Item key="users">
+              <Link to="/usuarios">Usuários</Link>
+            </Menu.Item>
           </Menu>
         </StyledHeader>
 
@@ -64,6 +68,7 @@ function App() {
             <Route path="/alunos" element={<StudentList />} />
             <Route path="/turmas" element={<TurmaList />} />
             <Route path="/pagamentos" element={<PaymentList />} />
+            <Route path="/usuarios" element={<UserList />} />
           </Routes>
         </StyledContent>
       </Layout>

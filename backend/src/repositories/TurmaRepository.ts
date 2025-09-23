@@ -1,5 +1,5 @@
 import { AppDataSource } from '../config/database';
-import { Aluno } from '../models/Aluno';
+import { Aluno } from '../models/aluno';
 import { Turma } from '../models/Turma';
 
 export class TurmaRepository {
