@@ -14,7 +14,7 @@ export class TurmaController {
 
   static async getTurmaById(req: Request, res: Response) {
     try {
-      const turma = await TurmaRepository.findById(req.params.id);
+      const turma = await TurmaRepository.findById(parseInt(req.params.id));
       if (!turma) {
         return res.status(404).json({ error: 'Turma not found' });
       }
@@ -49,7 +49,7 @@ export class TurmaController {
   static async updateTurma(req: Request, res: Response) {
     try {
       const { nome, horario, professor, observacao, data_aula } = req.body;
-      const turma = await TurmaRepository.update(req.params.id, {
+      const turma = await TurmaRepository.update(parseInt(req.params.id), {
         nome,
         horario,
         professor,
@@ -69,7 +69,7 @@ export class TurmaController {
 
   static async deleteTurma(req: Request, res: Response) {
     try {
-      const success = await TurmaRepository.delete(req.params.id);
+      const success = await TurmaRepository.delete(parseInt(req.params.id));
       if (!success) {
         return res.status(404).json({ error: 'Turma not found' });
       }
@@ -82,7 +82,7 @@ export class TurmaController {
   static async addAluno(req: Request, res: Response) {
     try {
       const { turmaId, alunoId } = req.params;
-      const turma = await TurmaRepository.addAluno(turmaId, alunoId);
+      const turma = await TurmaRepository.addAluno(parseInt(turmaId), parseInt(alunoId));
 
       if (!turma) {
         return res.status(404).json({ error: 'Turma ou aluno não encontrado' });
@@ -97,7 +97,7 @@ export class TurmaController {
   static async removeAluno(req: Request, res: Response) {
     try {
       const { turmaId, alunoId } = req.params;
-      const turma = await TurmaRepository.removeAluno(turmaId, alunoId);
+      const turma = await TurmaRepository.removeAluno(parseInt(turmaId), parseInt(alunoId));
 
       if (!turma) {
         return res.status(404).json({ error: 'Turma ou aluno não encontrado' });

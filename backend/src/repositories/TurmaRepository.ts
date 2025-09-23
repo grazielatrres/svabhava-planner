@@ -9,7 +9,7 @@ export class TurmaRepository {
         return this.repository.find({ relations: ['alunos'] });
     }
 
-    static async findById(id: string): Promise<Turma | null> {
+    static async findById(id: number): Promise<Turma | null> {
         return this.repository.findOne({
             where: { id },
             relations: ['alunos']
@@ -21,7 +21,7 @@ export class TurmaRepository {
         return this.repository.save(turma);
     }
 
-    static async update(id: string, turmaData: Partial<Turma>): Promise<Turma | null> {
+    static async update(id: number, turmaData: Partial<Turma>): Promise<Turma | null> {
         const turma = await this.findById(id);
         if (!turma) return null;
 
@@ -29,12 +29,12 @@ export class TurmaRepository {
         return this.repository.save(turma);
     }
 
-    static async delete(id: string): Promise<boolean> {
+    static async delete(id: number): Promise<boolean> {
         const result = await this.repository.delete(id);
         return result.affected !== 0;
     }
 
-    static async addAluno(turmaId: string, alunoId: string): Promise<Turma | null> {
+    static async addAluno(turmaId: number, alunoId: number): Promise<Turma | null> {
         const turma = await this.findById(turmaId);
         if (!turma) return null;
 
@@ -46,7 +46,7 @@ export class TurmaRepository {
         return this.repository.save(turma);
     }
 
-    static async removeAluno(turmaId: string, alunoId: string): Promise<Turma | null> {
+    static async removeAluno(turmaId: number, alunoId: number): Promise<Turma | null> {
         const turma = await this.findById(turmaId);
         if (!turma) return null;
 

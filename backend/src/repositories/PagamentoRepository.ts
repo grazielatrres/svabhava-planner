@@ -9,14 +9,14 @@ export class PagamentoRepository {
         return this.repository.find({ relations: ['aluno'] });
     }
 
-    static async findById(id: string): Promise<Pagamento | null> {
+    static async findById(id: number): Promise<Pagamento | null> {
         return this.repository.findOne({
             where: { id },
             relations: ['aluno']
         });
     }
 
-    static async findByAluno(alunoId: string): Promise<Pagamento[]> {
+    static async findByAluno(alunoId: number): Promise<Pagamento[]> {
         return this.repository.find({
             where: { aluno: { id: alunoId } },
             relations: ['aluno']
@@ -35,7 +35,7 @@ export class PagamentoRepository {
         return this.repository.save(pagamento);
     }
 
-    static async update(id: string, pagamentoData: Partial<Pagamento>): Promise<Pagamento | null> {
+    static async update(id: number, pagamentoData: Partial<Pagamento>): Promise<Pagamento | null> {
         const pagamento = await this.findById(id);
         if (!pagamento) return null;
 
@@ -43,12 +43,12 @@ export class PagamentoRepository {
         return this.repository.save(pagamento);
     }
 
-    static async delete(id: string): Promise<boolean> {
+    static async delete(id: number): Promise<boolean> {
         const result = await this.repository.delete(id);
         return result.affected !== 0;
     }
 
-    static async registrarPagamento(alunoId: string, valor: number, observacao?: string): Promise<Pagamento> {
+    static async registrarPagamento(alunoId: number, valor: number, observacao?: string): Promise<Pagamento> {
         const alunoRepository = AppDataSource.getRepository(Aluno);
         const aluno = await alunoRepository.findOneBy({ id: alunoId });
         if (!aluno) throw new Error('Aluno não encontrado');
@@ -62,7 +62,7 @@ export class PagamentoRepository {
         });
     }
 
-    static async registrarPagamentoPendente(alunoId: string, valor: number, observacao?: string): Promise<Pagamento> {
+    static async registrarPagamentoPendente(alunoId: number, valor: number, observacao?: string): Promise<Pagamento> {
         const alunoRepository = AppDataSource.getRepository(Aluno);
         const aluno = await alunoRepository.findOneBy({ id: alunoId });
         if (!aluno) throw new Error('Aluno não encontrado');

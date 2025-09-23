@@ -13,7 +13,7 @@ export class PresencaController {
 
   static async getPresencaById(req: Request, res: Response) {
     try {
-      const presenca = await PresencaRepository.findById(req.params.id);
+      const presenca = await PresencaRepository.findById(parseInt(req.params.id));
       if (!presenca) {
         return res.status(404).json({ error: 'Presença not found' });
       }
@@ -25,7 +25,7 @@ export class PresencaController {
 
   static async getPresencasByAluno(req: Request, res: Response) {
     try {
-      const presencas = await PresencaRepository.findByAluno(req.params.alunoId);
+      const presencas = await PresencaRepository.findByAluno(parseInt(req.params.alunoId));
       res.json(presencas);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -34,7 +34,7 @@ export class PresencaController {
 
   static async getPresencasByTurma(req: Request, res: Response) {
     try {
-      const presencas = await PresencaRepository.findByTurma(req.params.turmaId);
+      const presencas = await PresencaRepository.findByTurma(parseInt(req.params.turmaId));
       res.json(presencas);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
@@ -46,7 +46,7 @@ export class PresencaController {
       const { alunoId, turmaId } = req.params;
       const { presente } = req.body;
 
-      const presenca = await PresencaRepository.registrarPresenca(alunoId, turmaId, presente);
+      const presenca = await PresencaRepository.registrarPresenca(parseInt(alunoId), parseInt(turmaId), presente);
       res.status(201).json(presenca);
     } catch (error) {
       if (error instanceof Error) {
@@ -64,7 +64,7 @@ export class PresencaController {
   static async updatePresenca(req: Request, res: Response) {
     try {
       const { presente } = req.body;
-      const presenca = await PresencaRepository.update(req.params.id, { presente });
+      const presenca = await PresencaRepository.update(parseInt(req.params.id), { presente });
 
       if (!presenca) {
         return res.status(404).json({ error: 'Presença not found' });
@@ -78,7 +78,7 @@ export class PresencaController {
 
   static async deletePresenca(req: Request, res: Response) {
     try {
-      const success = await PresencaRepository.delete(req.params.id);
+      const success = await PresencaRepository.delete(parseInt(req.params.id));
       if (!success) {
         return res.status(404).json({ error: 'Presença not found' });
       }

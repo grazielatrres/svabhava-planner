@@ -10,21 +10,21 @@ export class PresencaRepository {
         return this.repository.find({ relations: ['aluno', 'turma'] });
     }
 
-    static async findById(id: string): Promise<Presenca | null> {
+    static async findById(id: number): Promise<Presenca | null> {
         return this.repository.findOne({
             where: { id },
             relations: ['aluno', 'turma']
         });
     }
 
-    static async findByAluno(alunoId: string): Promise<Presenca[]> {
+    static async findByAluno(alunoId: number): Promise<Presenca[]> {
         return this.repository.find({
             where: { aluno: { id: alunoId } },
             relations: ['aluno', 'turma']
         });
     }
 
-    static async findByTurma(turmaId: string): Promise<Presenca[]> {
+    static async findByTurma(turmaId: number): Promise<Presenca[]> {
         return this.repository.find({
             where: { turma: { id: turmaId } },
             relations: ['aluno', 'turma']
@@ -36,7 +36,7 @@ export class PresencaRepository {
         return this.repository.save(presenca);
     }
 
-    static async update(id: string, presencaData: Partial<Presenca>): Promise<Presenca | null> {
+    static async update(id: number, presencaData: Partial<Presenca>): Promise<Presenca | null> {
         const presenca = await this.findById(id);
         if (!presenca) return null;
 
@@ -44,12 +44,12 @@ export class PresencaRepository {
         return this.repository.save(presenca);
     }
 
-    static async delete(id: string): Promise<boolean> {
+    static async delete(id: number): Promise<boolean> {
         const result = await this.repository.delete(id);
         return result.affected !== 0;
     }
 
-    static async registrarPresenca(alunoId: string, turmaId: string, presente: boolean): Promise<Presenca> {
+    static async registrarPresenca(alunoId: number, turmaId: number, presente: boolean): Promise<Presenca> {
         const alunoRepository = AppDataSource.getRepository(Aluno);
         const turmaRepository = AppDataSource.getRepository(Turma);
 

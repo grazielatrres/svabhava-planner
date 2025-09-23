@@ -2,10 +2,10 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Presenca } from './Presenca';
 import { Pagamento } from './Pagamento';
 
-@Entity('Alunos')
+@Entity('alunos')
 export class Aluno {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
     @Column()
     nome!: string;

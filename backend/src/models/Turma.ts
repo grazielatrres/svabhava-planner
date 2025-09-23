@@ -4,8 +4,8 @@ import { Presenca } from './Presenca';
 
 @Entity('turmas')
 export class Turma {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
     @Column()
     nome!: string;
