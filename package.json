@@ -1,5 +1,20 @@
 {
+  "name": "svabhava-planner",
+  "version": "1.0.0",
+  "description": "Svabhava Planner - Yoga Studio Management System",
+  "main": "backend/dist/app.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "build": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
   "dependencies": {
     "axios": "^1.9.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }
