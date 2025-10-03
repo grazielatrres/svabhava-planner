@@ -7,11 +7,16 @@
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
+    "postbuild": "echo 'Build completed successfully'",
     "test": "jest",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:run": "npm run typeorm migration:run -- -d src/config/database.ts",
     "migration:revert": "npm run typeorm migration:revert -- -d src/config/database.ts",
     "migration:show": "npm run typeorm migration:show -- -d src/config/database.ts"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "keywords": [],
   "author": "",

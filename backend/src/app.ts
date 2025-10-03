@@ -14,7 +14,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  origin: [
+    process.env.CORS_ORIGIN || 'http://localhost:5173',
+    'https://svabhava-planner.vercel.app',
+    'https://svabhava-planner-git-main-grazielatrres-projects.vercel.app',
+    'https://svabhava-planner-krbe3hqjk-grazielatrres-projects.vercel.app'
+  ],
   credentials: true
 }));
 app.use(express.json());
