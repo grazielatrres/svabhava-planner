@@ -16,9 +16,9 @@ O **Svabhava Planner** é um sistema web completo desenvolvido para gerenciar au
 
 - **Controle de Presença**: Registro de presença e falta dos alunos em cada aula, com histórico completo de frequência individual.
 
-- **Gestão Financeira**: Sistema completo de pagamentos que permite registrar pagamentos realizados, controlar pendências, visualizar histórico financeiro por aluno e receber alertas sobre pagamentos atrasados.
+- **Gestão Financeira**: Sistema completo de pagamentos que permite registrar pagamentos realizados, controlar pendências, visualizar histórico financeiro por aluno e identificar pagamentos atrasados no dashboard.
 
-- **Dashboard e Estatísticas**: Visão geral com métricas importantes como número de turmas, quantidade de alunos, taxa de ocupação e indicadores de ausências.
+- **Dashboard e Estatísticas**: Visão geral com métricas importantes como número de turmas, quantidade de alunos, taxa de presença e indicadores de ausências, além de visualização de próximas aulas e pagamentos pendentes.
 
 - **Interface Responsiva**: Design adaptável que funciona perfeitamente em desktops, tablets e smartphones, permitindo acesso de qualquer dispositivo.
 
@@ -55,8 +55,8 @@ O Svabhava Planner foi desenvolvido para resolver essas necessidades, oferecendo
 - **Automatiza processos** que antes eram manuais e propensos a erros
 - **Centraliza informações** de alunos, turmas, presenças e pagamentos em um único sistema
 - **Facilita a gestão** com interface intuitiva e responsiva, acessível de qualquer dispositivo
-- **Fornece insights** através de estatísticas e relatórios que auxiliam na tomada de decisões
-- **Melhora a experiência** tanto da instrutora quanto dos alunos, com confirmações automáticas e histórico organizado
+- **Fornece insights** através de estatísticas e métricas que auxiliam na tomada de decisões
+- **Organiza o histórico** de alunos, presenças e pagamentos de forma clara e acessível
 
 Este projeto demonstra a aplicação prática do conhecimento acadêmico em benefício da comunidade, fortalecendo a relação entre universidade e sociedade através da extensão universitária.
 
@@ -67,7 +67,7 @@ Este projeto demonstra a aplicação prática do conhecimento acadêmico em bene
 
 RF1: O sistema deve permitir que a instrutora cadastre novos alunos com nome, e-mail e telefone.
 
-RF2: O sistema deve permitir login e logout da instrutora com autenticação por e-mail e senha.
+RF2: O sistema deve permitir login e logout da instrutora com autenticação por e-mail e senha. *(Pendente - não implementado)*
 
 RF3: O sistema deve permitir à instrutora criar, editar e excluir turmas com até 3 alunos, informando data, horário e lista de alunos inscritos.
 
@@ -111,7 +111,7 @@ RNF7: O sistema deve funcionar corretamente nos principais navegadores: Chrome, 
 
 RNF8: Deve evitar requisições desnecessárias, usar cache onde possível e carregar dados de forma eficiente.
 
-RNF9: As senhas devem ser armazenadas de forma criptografada (ex: bcrypt) e o acesso ao sistema deve ser protegido por autenticação.
+RNF9: As senhas devem ser armazenadas de forma criptografada (ex: bcrypt) e o acesso ao sistema deve ser protegido por autenticação. *(Pendente - não implementado)*
 
 RNF10: O sistema deve estar disponível para uso em pelo menos 99,9% do tempo, com mecanismos para evitar quedas.
 
@@ -119,7 +119,7 @@ RNF11: Deve haver backups automáticos e manuais dos dados críticos, como aluno
 
 RNF12: O sistema deve ser totalmente funcional em telas a partir de 320px de largura.
 
-RNF13: O sistema deve gerar relatórios (PDF ou CSV) de turmas, alunos matriculados e frequência por período.
+RNF13: O sistema deve gerar relatórios (PDF ou CSV) de turmas, alunos matriculados e frequência por período. *(Pendente - não implementado)*
 
 RNF14: O sistema deve exibir mensagens de erro claras e compreensíveis para a instrutora em caso de falhas.
 
@@ -172,24 +172,20 @@ npm install
    - Backend: Copie `backend/env.example` para `backend/.env` e configure as variáveis
    - Frontend: Copie `frontend/env.example` para `frontend/.env` e configure a URL da API
 
-6. **Execute as migrações do banco de dados**
-```bash
-cd ../backend
-npm run migration:run
-```
-
-7. **Inicie o servidor backend**
+6. **Inicie o servidor backend**
 ```bash
 npm run dev
 ```
 
-8. **Em outro terminal, inicie o servidor frontend**
+7. **Em outro terminal, inicie o servidor frontend**
 ```bash
 cd frontend
 npm run dev
 ```
 
-O sistema estará disponível em `http://localhost:5173` (frontend) e a API em `http://localhost:3000` (backend).
+O sistema estará disponível em `http://localhost:5173` (frontend) e a API em `http://localhost:3001` (backend).
+
+**Nota:** O banco de dados será criado automaticamente pelo TypeORM na primeira execução (synchronize: true). As tabelas serão geradas automaticamente com base nos modelos definidos.
 
 ## 🌐 Compatibilidade
 
@@ -229,19 +225,18 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 
 ## 👥 Casos de Uso
 
-### Cadastro de Usuário (Pendente)
-- Acesso à página de cadastro
-- Preenchimento de formulário
-- Validação de dados
-- Criação de conta
-- Confirmação por e-mail
+### Autenticação e Segurança (Pendente)
+- Sistema de login e logout
+- Autenticação por e-mail e senha
+- Criptografia de senhas
+- Proteção de rotas
 
 ### Gestão de turmas
 - Visualização das turmas cadastradas
 - Inclusão/Edição de turmas
-- Vincular aulo à aula
+- Vincular alunos às turmas (até 3 alunos por turma)
 - Registro de presença do aluno na turma
-- Notificação por e-mail - Pendente
+- Visualização de agenda com próximas aulas
 
 ### Gestão de pagamento
 - Visualizar pagamentos
@@ -255,7 +250,6 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 - Visualizar histórico de pagamento por aluno
 - Remover alunos
 
-Vou propor uma descrição atualizada que reflete a realidade do projeto:
 
 ## 🛠 Padrões de Desenvolvimento e tecnologias utilizadas
 
@@ -265,19 +259,25 @@ Vou propor uma descrição atualizada que reflete a realidade do projeto:
 
 ### Frontend
 - **React com TypeScript** - Desenvolvimento com tipagem forte e componentes funcionais
+- **Vite** - Build tool e servidor de desenvolvimento rápido
 - **Ant Design** - UI components para interface consistente
 - **Styled Components** - Estilização com CSS-in-JS
-- **React Router** - Roteamento da aplicação
+- **React Router DOM** - Roteamento da aplicação
+- **Axios** - Cliente HTTP para comunicação com a API
+- **dayjs** - Biblioteca para manipulação de datas
 
 ### Backend
 - **Express.js** - Framework para construção da API REST
 - **TypeORM** - ORM para gerenciamento de banco de dados
-- **Migrations** - Sistema de migrações para controle de versão do banco de dados
+- **MySQL2** - Driver MySQL para Node.js
+- **CORS** - Middleware para habilitar requisições cross-origin
+- **dotenv** - Gerenciamento de variáveis de ambiente
 
 ### Padrões de Código
-- **TypeScript Strict Mode** - Tipo forte e verificação estática em ambos frontend e backend
+- **TypeScript** - Tipagem forte e verificação estática em ambos frontend e backend
 - **ESLint** - Padronização de código no frontend
 - **Decorators** - Uso de decorators para metadados e configuração (TypeORM)
+- **Repository Pattern** - Separação da lógica de acesso a dados em repositórios
 
 ### API e Integração
 - **REST Architecture** - Endpoints RESTful com separação clara de responsabilidades
@@ -288,34 +288,43 @@ Vou propor uma descrição atualizada que reflete a realidade do projeto:
 
 #### Frontend
 ```
-src/
-├── assets/      # Recursos estáticos
-├── components/  # Componentes reutilizáveis
-├── pages/       # Páginas da aplicação
-├── services/    # Serviços de API
-└── contexts/    # (Preparado para Context API)
+frontend/src/
+├── assets/      # Recursos estáticos (imagens, ícones)
+├── pages/       # Páginas da aplicação (Home, StudentList, TurmaList, PaymentList, etc.)
+├── services/    # Serviços de API (alunoService, turmaService, paymentService, etc.)
+├── App.tsx      # Componente principal da aplicação
+├── main.tsx     # Ponto de entrada da aplicação
+└── config.ts    # Configurações da aplicação
 ```
 
 #### Backend
 ```
-src/
-├── config/      # Configurações da aplicação
-├── controllers/ # Controladores da API
-├── models/      # Modelos de dados
-├── services/    # Lógica de negócio
-├── repositories/# Acesso a dados
-├── routes/      # Definição de rotas
-├── middlewares/ # Middlewares da aplicação
-└── interfaces/  # Definições de tipos
+backend/src/
+├── config/         # Configurações (database.ts, bd.ts)
+├── controllers/    # Controladores da API (alunoController, turmaController, etc.)
+├── models/         # Modelos de dados/entidades TypeORM (Aluno, Turma, Presenca, Pagamento)
+├── repositories/   # Repositórios para acesso a dados
+├── routes/         # Definição de rotas da API
+└── app.ts          # Arquivo principal da aplicação Express
+```
 
 ## 🗄️ Banco de Dados
 
 ### Tecnologia
 - **MySQL** - Sistema de gerenciamento de banco de dados relacional (RDBMS)
 - **TypeORM** - ORM para TypeScript/Node.js
+- **Synchronize Mode** - O TypeORM está configurado com `synchronize: true`, criando automaticamente as tabelas baseadas nos modelos. Em produção, recomenda-se usar migrations.
 
 ### Modelo de Dados
 O sistema utiliza um modelo relacional com as seguintes entidades principais:
+- **Aluno**: Informações dos alunos (nome, email, telefone, endereço, observações)
+- **Turma**: Turmas de yoga (nome, horário, data_aula, professor, observações)
+- **Presenca**: Registro de presença/falta dos alunos nas turmas
+- **Pagamento**: Registro de pagamentos (valor, data, status: pendente/atrasado/pago)
+
+As relações são:
+- Aluno possui múltiplas Presenças e Pagamentos
+- Turma possui múltiplos Alunos (relação Many-to-Many) e múltiplas Presenças
 
 ![image](https://github.com/user-attachments/assets/29362b34-86fc-4857-9bc0-4320d8b6edb5)
 
