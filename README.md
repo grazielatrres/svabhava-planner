@@ -4,10 +4,35 @@
 
 O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do projeto de extensão acadêmica (PAC - Projeto de Aprendizagem Colaborativa Extensionista) do curso de Engenharia de Software no Centro Universitário Católica de Santa Catarina(Campus Joinville). O sistema foi projetado para facilitar o gerenciamento de aulas de yoga, tendo como caso de estudo as necessidades da instrutora Sibelle Eggert. A plataforma oferece uma solução completa para o gerenciamento de alunos, agendamentos e matrículas, demonstrando como o conhecimento acadêmico pode ser aplicado para beneficiar a comunidade.
 
+## 📱 Descrição do App
+
+O **Svabhava Planner** é um sistema web completo desenvolvido para gerenciar aulas de yoga de forma eficiente e organizada. A aplicação permite que instrutores de yoga controlem todos os aspectos do seu negócio através de uma interface moderna e intuitiva.
+
+### Funcionalidades Principais:
+
+- **Gestão de Alunos**: Cadastro completo de alunos com informações pessoais (nome, e-mail, telefone), histórico de participação e dados de contato organizados.
+
+- **Gestão de Turmas**: Criação e organização de turmas com controle de vagas (máximo de 3 alunos por turma), agendamento de horários e datas, e visualização de agenda diária.
+
+- **Controle de Presença**: Registro de presença e falta dos alunos em cada aula, com histórico completo de frequência individual.
+
+- **Gestão Financeira**: Sistema completo de pagamentos que permite registrar pagamentos realizados, controlar pendências, visualizar histórico financeiro por aluno e receber alertas sobre pagamentos atrasados.
+
+- **Dashboard e Estatísticas**: Visão geral com métricas importantes como número de turmas, quantidade de alunos, taxa de ocupação e indicadores de ausências.
+
+- **Interface Responsiva**: Design adaptável que funciona perfeitamente em desktops, tablets e smartphones, permitindo acesso de qualquer dispositivo.
+
+A aplicação foi desenvolvida utilizando tecnologias modernas como React com TypeScript no frontend e Express.js com TypeORM no backend, garantindo uma experiência de usuário fluida e um sistema robusto e escalável.
+
 #### Acadêmicos
 - Andrey Garcia dos Santos
 - Graziela Torres
 - Sophia Eggert Freire da Rocha
+
+### Professores orientadores
+
+- Luiz Carlos Camargo
+- Claudinei Dias
 
 ## Divisão de responsabilidades
 
@@ -15,12 +40,25 @@ O Svabhava Planner é uma aplicação web moderna desenvolvida como parte do pro
 - Andrey: Backend e frontend
 - Graziela: Frontend, infraestrutura
 
-### Principais Funcionalidades
-- Cadastro e gerenciamento de alunos
-- Agendamento de aulas
-- Gestão de turmas e horários
-- Confirmações automáticas por e-mail
-- Interface responsiva e intuitiva
+## 🎯 Justificativa do PAC
+
+Este projeto foi desenvolvido como parte do PAC (Projeto de Aprendizagem Colaborativa Extensionista) do curso de Engenharia de Software da Católica de Santa Catarina, tendo como entidade beneficiada a instrutora de yoga **Sibelle Eggert**.
+
+A instrutora Sibelle Eggert enfrentava desafios significativos no gerenciamento manual de suas aulas de yoga, incluindo:
+- Dificuldade em organizar e acompanhar o cadastro de alunos
+- Controle manual de agendamentos e matrículas em turmas
+- Ausência de um sistema centralizado para registro de presença
+- Gestão financeira manual de pagamentos e pendências
+- Falta de visibilidade sobre estatísticas e histórico de alunos
+
+O Svabhava Planner foi desenvolvido para resolver essas necessidades, oferecendo uma solução tecnológica completa que:
+- **Automatiza processos** que antes eram manuais e propensos a erros
+- **Centraliza informações** de alunos, turmas, presenças e pagamentos em um único sistema
+- **Facilita a gestão** com interface intuitiva e responsiva, acessível de qualquer dispositivo
+- **Fornece insights** através de estatísticas e relatórios que auxiliam na tomada de decisões
+- **Melhora a experiência** tanto da instrutora quanto dos alunos, com confirmações automáticas e histórico organizado
+
+Este projeto demonstra a aplicação prática do conhecimento acadêmico em benefício da comunidade, fortalecendo a relação entre universidade e sociedade através da extensão universitária.
 
 ## 💻 Requisitos do Sistema
 
@@ -98,19 +136,60 @@ RNF15: O sistema deve exibir em formato de calendário ou lista todas as turmas 
 
 
 
-## 🔧 Instalação e Uso
+## 🔧 Requisitos para Preparar o Ambiente de Desenvolvimento
 
+### Pré-requisitos
+- **Node.js** (versão 18 ou superior)
+- **npm** (versão 9 ou superior) ou **yarn**
+- **MySQL** (versão 8.0 ou superior)
+- **Git** para clonar o repositório
+
+### Instalação
+
+1. **Clone o repositório**
 ```bash
-# Clone o repositório
 git clone https://github.com/grazielatrres/svabhava-planner.git
-
-# Instale as dependências
-npm install
-
-# Inicie o servidor de desenvolvimento
-npm run dev
-
+cd svabhava-planner
 ```
+
+2. **Configure o banco de dados MySQL**
+   - Crie um banco de dados MySQL
+   - Configure as variáveis de ambiente no backend (consulte `backend/env.example`)
+
+3. **Instale as dependências do backend**
+```bash
+cd backend
+npm install
+```
+
+4. **Instale as dependências do frontend**
+```bash
+cd ../frontend
+npm install
+```
+
+5. **Configure as variáveis de ambiente**
+   - Backend: Copie `backend/env.example` para `backend/.env` e configure as variáveis
+   - Frontend: Copie `frontend/env.example` para `frontend/.env` e configure a URL da API
+
+6. **Execute as migrações do banco de dados**
+```bash
+cd ../backend
+npm run migration:run
+```
+
+7. **Inicie o servidor backend**
+```bash
+npm run dev
+```
+
+8. **Em outro terminal, inicie o servidor frontend**
+```bash
+cd frontend
+npm run dev
+```
+
+O sistema estará disponível em `http://localhost:5173` (frontend) e a API em `http://localhost:3000` (backend).
 
 ## 🌐 Compatibilidade
 
@@ -123,6 +202,30 @@ O sistema é compatível com os seguintes navegadores:
 
 A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 - Desktops
+- Tablets
+- Smartphones
+
+## 📸 Telas do Sistema
+
+### Dashboard
+![Dashboard](assets/screenshot-dashboard.png)
+**Descrição:** Tela principal do sistema exibindo visão geral com estatísticas de alunos, turmas e informações resumidas para a instrutora.
+
+### Gestão de Alunos
+![Alunos](assets/screenshot-alunos.png)
+**Descrição:** Interface para cadastro, edição e visualização de alunos, permitindo gerenciar informações pessoais e histórico de cada aluno.
+
+### Gestão de Turmas
+![Turmas](assets/screenshot-turmas.png)
+**Descrição:** Tela para criação e gerenciamento de turmas, incluindo agendamento de horários, matrícula de alunos e controle de vagas disponíveis.
+
+### Gestão de Pagamentos
+![Pagamentos](assets/screenshot-pagamentos.png)
+**Descrição:** Interface para registro e acompanhamento de pagamentos, permitindo visualizar status financeiro de cada aluno e histórico de transações.
+
+### Alunos e Pagamentos - Visão Integrada
+![Alunos e Pagamentos](assets/screenshot-alunos-pagamentos-atalho.png)
+**Descrição:** Visão integrada que permite acesso rápido às informações de alunos e seus respectivos pagamentos, facilitando a gestão financeira.
 
 ## 👥 Casos de Uso
 
