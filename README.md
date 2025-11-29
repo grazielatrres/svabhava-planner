@@ -254,8 +254,8 @@ A aplicação é totalmente responsiva, adaptando-se aos seguintes dispositivos:
 ## 🛠 Padrões de Desenvolvimento e tecnologias utilizadas
 
 ### Arquitetura
-- **Clean Architecture (Backend)** - Separação clara de responsabilidades em controllers, services, repositories e models
-- **Component-Based Architecture (Frontend)** - Estrutura baseada em componentes React com separação em pages e components
+- **Clean Architecture (Backend)** - Separação clara de responsabilidades em controllers, repositories e models
+- **Component-Based Architecture (Frontend)** - Estrutura baseada em componentes React com separação em pages e services
 
 ### Frontend
 - **React com TypeScript** - Desenvolvimento com tipagem forte e componentes funcionais
@@ -313,7 +313,7 @@ backend/src/
 ### Tecnologia
 - **MySQL** - Sistema de gerenciamento de banco de dados relacional (RDBMS)
 - **TypeORM** - ORM para TypeScript/Node.js
-- **Synchronize Mode** - O TypeORM está configurado com `synchronize: true`, criando automaticamente as tabelas baseadas nos modelos. Em produção, recomenda-se usar migrations.
+- **Synchronize Mode** - O TypeORM está configurado com `synchronize: true`, criando automaticamente as tabelas baseadas nos modelos. Para ambientes de produção, é necessário configurar migrations.
 
 ### Modelo de Dados
 O sistema utiliza um modelo relacional com as seguintes entidades principais:
